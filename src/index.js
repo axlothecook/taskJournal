@@ -22,3 +22,9 @@ import { compareAsc, format, formatDistance, formatRelative, subDays } from 'dat
 //   new Date(1989, 6, 10),
 // ];
 // console.log(dates.sort(compareAsc));
+
+let createButton = document.querySelector('#add-btn');
+let createNew = document.querySelector('#create-new-task-popup');
+createButton.addEventListener('click', (e) => {
+    createNew.style.display = 'block';
+})
