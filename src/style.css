@@ -2,6 +2,11 @@ html, body, #wrapper{
     height: 100%;
 }
 
+*, *::before, *::after{
+    padding: 0;
+    margin: 0;
+}
+
 body{
     --main-content: white;
     --side-bar: #eee;
@@ -9,8 +14,6 @@ body{
 
     background-color: white;
     color: black;
-    padding: 0;
-    margin: 0;
     box-sizing: border-box;
     display: flex; 
     flex-flow: column wrap;
@@ -22,6 +25,35 @@ h1, h2, h3{
     margin-block-end: 0em;
 }
 
+input, textarea{
+    background-color: transparent;
+    border: none;
+    cursor: text;
+}
+
+input:hover, input:focus{
+    outline: none;
+}
+
+textarea{
+    border: none;
+    font-family: inherit;
+    resize: none;
+}
+
+textarea:focus{
+    outline: none;
+}
+
+span{
+    font-size: 18px;
+}
+
+object{
+    pointer-events: none;
+    cursor: pointer;
+}
+
 #wrapper, #create-new-task-popup{
     width: 100%;
     display: grid;
@@ -29,12 +61,12 @@ h1, h2, h3{
     grid-template-rows: 1fr 10fr;
 }
 
-.topbar{
+#topbar{
     grid-area: 1 / 1 / 1 / 3;
     background-color: var(--btn-topbar);
 
     display: flex;
-    align-items: flex-end;   /* check if topbar is centered */
+    align-items: flex-end;  
     padding: 0 0 15px 45px;
 }
 
@@ -54,21 +86,39 @@ h1, h2, h3{
     gap: 20px;
 }
 
-.main-sidebar-text, .subtype-sidebar-text{
+.main-sidebar-text, .subtype-sidebar-text, #main-sidebar-text-no-hover{
     height: 29px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.main-sidebar-text:hover, .subtype-sidebar-text:hover{
+
+.hover-class-for-main-and-subtype-sidebar-text-div{
+    /* .main-sidebar-text | .subtype-sidebar-text */
     cursor: pointer;
     transform: scale(1.05);
-    color: var(--btn-topbar); /* set a function to change color of number in circle to white*/
 }
 
-.main-sidebar-text > h1{
+.sidebar-text-h1{
     font-size: 25px;
+    font-weight: bold;
+    /* add with js on hover: var(--btn-topbar); */
+}
+
+.show-number{
+    width: 25px;
+    height: 25px;
+    background-color: var(--btn-topbar);
+    font-size: 17px;
+    border: none;
+    border-radius: 25px;
+    padding: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* add with js on hover: color: black; */
 }
 
 #projects-div{
@@ -84,23 +134,10 @@ h1, h2, h3{
     gap: 10px;
 }
 
-.subtype-sidebar-text > h3{
+.sidebar-text-h3{
     font-size: 15px;
     font-weight: normal;
-}
-
-.show-number{
-    width: 25px;
-    height: 25px;
-    background-color: var(--btn-topbar);
-    font-size: 17px;
-    border: none;
-    border-radius: 25px;
-    padding: 2px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* add with js on hover: var(--btn-topbar); */
 }
 
 #add-btn{
@@ -129,16 +166,18 @@ h1, h2, h3{
 .content-div{
     grid-area: 2 / 2 / 3 / 3;
     background-color: var(--main-content);
+}
 
+.content-div-flex{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 50px;
-    gap: 10px;
+    gap: 1.3rem;
+    padding: 5rem 7rem;
 }
 
-/* code for individual to do item in main content */
-.example-div{
+/* code for individual item in main content */
+.task-div{
     background-color: var(--side-bar);
     height: 2rem;
     padding: 0.4rem 1rem;
@@ -146,15 +185,18 @@ h1, h2, h3{
     justify-content: space-between;
     align-items: center;
     border: none;
-    cursor: pointer;
 }
 
-#example-div-1{
+.task-div.border-green{
     border-left: 3px solid green;
 }
 
-#example-div-2{
+.task-div.border-orange{
     border-left: 3px solid orange;
+}
+
+.task-div.border-red{
+    border-left: 3px solid red;
 }
 
 .left-side{
@@ -172,7 +214,7 @@ h1, h2, h3{
     cursor: pointer;
 }
 
-.checkbox-div:active{ /* turn to on click func*/
+.checkbox-div.active{ 
     background-image: url(../image/check.png);
     background-repeat: no-repeat;
     background-size: contain;
@@ -188,12 +230,17 @@ h1, h2, h3{
     font-size: 13px;
 }
 
+.date-display-div{
+    width: 5rem;
+}
+
 .btn-div{
     font-size: 13px;
     padding: 5px 11px;
     border-radius: 3px;
     cursor: pointer;
     text-align: center;
+    font-weight: 700;
 }
 
 .btn-div:hover{
@@ -211,46 +258,48 @@ h1, h2, h3{
     background-color: #119999;
 }
 
-.example-div:hover{
-    cursor: pointer;
-    transition: all 0.5s;  /* duration of movement */
-    transform: scale(1.02); /* pop out size */
+/* rename example-note to note-div */
+.task-div:hover, .example-note:hover{
+    transition: all 0.3s;  /* duration of movement */
+    transform: scale(1.01); /* pop out size */
     box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
 } 
-
-/* add cursor:hover to svg's */
 
 .svg-div{
     width: 0.9rem;
     height: 0.9rem;
 }
 
-.svg-div:hover{
+.edit-svg-div:hover, .trash-svg-div:hover{
+    cursor: pointer;
     filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
 }
 
 
 /* popup to create a new task */
 #create-new-task-popup{
-    /* display: none; */
+    position: relative;
     width: 60rem;
     height: 30rem;
+    margin: auto;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
 
 .topbar-create-todo-popup{
+    grid-column: 1 / 3;
     padding: 5px 20px;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--btn-topbar);
 }
 
 .create-new-close{
     width: 1.5rem;
     height: 1.5rem;
     filter: invert(100%) sepia(0%) saturate(1709%) hue-rotate(287deg) brightness(106%) contrast(106%);
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 
 .create-new-close:hover{
@@ -258,8 +307,8 @@ h1, h2, h3{
     filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
 }
 
-.content-create-todo-popup{
-    padding: 30px;
+.right-side-of-popup{
+    padding: 50px;
     display: grid;
     grid-template-columns: 6fr 1fr;
     gap: 35px;
@@ -271,8 +320,25 @@ h1, h2, h3{
     border-right: 1px solid grey;
 }
 
-.option-text > h1{
-    font-weight: 100;
+.option-text, .note-title{
+    font-size: 25px;
+    font-weight: normal;
+    cursor: pointer;
+    transform: scale (1); 
+    color: black;
+    /* add with js on hover to the element, not class: var(--btn-topbar); */
+}
+
+.option-text.mouseOn{
+    font-weight: bold;
+    transform: scale (1.02); 
+    color: black;
+}
+
+.option-text:hover{
+    font-weight: bold;
+    transform: scale (1.02); 
+    color: black;
 }
 
 .input-wrapper-div{
@@ -281,17 +347,9 @@ h1, h2, h3{
     gap: 15px;
 }
 
-.input-wrapper-div > input{
-    border: none;
-    cursor: text;
-}
-
-.input-wrapper-div > input:hover, .input-wrapper-div > input:focus{
-    outline: none;
-}
-
 .title-input{
     font-size: 20px;
+    font-weight: 500;
 }
 
 .details-input{
@@ -321,38 +379,56 @@ h1, h2, h3{
     gap: 50px;
 }
 
-.priority-div{
+.priority-div, .add-todo-btn{
     width: 4.5rem;
 }
 
-#low-priority-div{
+.low{
     color: green;
-    background-color: (green, 0.7);
+    /* background-color: (green, 0.7); */
     border: 1px solid green;
 }
 
-#low-priority-div:hover{
+.low.add-green{
     background-color: green;
+    color: white;
 }
 
-#medium-priority-div{
+.low:hover{
+    background-color: green;
+    color: white;
+}
+
+.medium{
     color: orange;
-    background-color: (orange, 0.7);
+    /* background-color: (orange, 0.7); */
     border: 1px solid orange;
 }
 
-#medium-priority-div:hover{
+.medium.add-orange{
     background-color: orange;
+    color: white;
 }
 
-#high-priority-div{
+.medium:hover{
+    background-color: orange;
+    color: white;
+}
+
+.high{
     color: red;
-    background-color: (red, 0.7);
+    /* background-color: (red, 0.7); */
     border: 1px solid red;
 }
 
-#high-priority-div:hover{
+.high.add-red{
     background-color: red;
+    color: white;
+}
+
+.high:hover{
+    background-color: red;
+    color: white;
 }
 
 .shared-display-flex-gap-10px{
@@ -373,4 +449,167 @@ h1, h2, h3{
 #priority-divs-wrapper-parent, #priority-divs-wrapper-child{
     flex-wrap: wrap;
     align-content: center;
+}
+
+/* code for create project & note popup */
+.right-side-submit-btn-div{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.create-project-note-btn{
+    width: 7rem;
+}
+
+/* for note */
+.content-div-grid{
+    padding: 0 2rem;
+    overflow-y: auto;
+}
+
+.grid{
+    display: flex;
+}
+
+.grid-col{
+    width: 33.33%;
+    padding: 0 10px;
+}
+
+.grid-col--1{
+    padding-left: 0px;
+}
+
+.grid-col--3{
+    padding-right: 0px;
+}
+
+.example-note{
+    position: relative;
+    height: fit-content;
+    background-color: var(--side-bar);
+    margin-top: 2rem;
+    padding: 1.3rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.note-title, .note-paragraph{
+    height: auto;
+    white-space: pre-wrap;
+}
+
+.note-title{
+    margin-bottom: 2rem;
+}
+
+/* #create-note-close, #create-edit-close */
+.close-svg-div{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    line-height: 1;
+    width: 1rem;
+    height: 1rem;
+}
+
+.close-svg-div:hover{
+    cursor: pointer;
+}
+
+.close-x-svg{
+    filter: invert(0%) sepia(7%) saturate(7471%) hue-rotate(279deg) brightness(91%) contrast(109%);
+    width: 1rem;
+    height: 1rem;
+}
+
+
+/* edit popup  */
+.edit-popup{
+    position: relative;
+    height: 21rem;
+    width: 50rem;
+    margin: auto;
+    background-color: #f7f7f7;
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 10px;
+}
+
+.confirm-changes-btn{
+    width: 8rem;
+}
+
+#textarea-wrapper-div{
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+#textarea-wrapper-div textarea:first-of-type{
+    line-height: 0.8; 
+}
+
+#textarea-wrapper-div textarea:last-of-type{
+    height: 100%;
+    line-height: 1.5; 
+}
+
+#create-edit-close{
+    filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
+}
+
+
+
+/* details popup code */
+#details-popup{
+    position: relative;
+    width: 40rem;
+    margin: auto;
+    padding: 2rem;
+    background-color: #f7f7f7;
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 10px;
+    /* opacity: 0;  */  /* doesnt work */
+}
+
+::backdrop{  /* animate so that blur comes in and off */
+    background: rgb(0 0 0 / 30%);
+    backdrop-filter: blur(6px);
+}
+
+#details-popup-text-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+#details-popup-title{
+    font-size: 35px;
+}
+
+#details-popup-about-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#details-popup-category{ 
+    margin-right: 4.2rem;
+}
+
+#details-popup-urgency{
+    margin-right: 4.1rem;
+}
+
+#details-popup-deadline{
+    margin-right: 3rem;
+}
+
+#details-popup-more{
+    margin-right: 1.9rem;
 }

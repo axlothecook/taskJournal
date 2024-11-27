@@ -6,55 +6,56 @@
     <title>Task Journal</title>
 </head>
 <body>
-    <div id="wrapper">
-        <!-- <div class="topbar"><h1>Task Journal</h1></div>
-        <div class="sidebar">
+    <div id="wrapper"></div>
+    <!-- <div id="wrapper"> -->
+        <!-- <div id="topbar"><h1>Task Journal</h1></div> -->
+        <!-- <div class="sidebar">
             <div class="main-sidebar-text-wrapper">
                 <div class="main-sidebar-text all-tasks-div">
-                    <h1>All Tasks</h1>
+                    <div class="sidebar-text-h1">All Tasks</div>
                     <div class="show-number">2</div>
                 </div>
                 <div class="main-sidebar-text this-month-tasks-div">
-                    <h1>This Month</h1>
+                    <div class="sidebar-text-h1">This Month</div>
                     <div class="show-number">3</div>
                 </div>
                 <div class="main-sidebar-text this-week-tasks-div">
-                    <h1>This Week</h1>
+                    <div class="sidebar-text-h1">This Week</div>
                     <div class="show-number">45</div>
                 </div>
                 <div class="main-sidebar-text today-tasks-div">
-                    <h1>Today</h1>
+                    <div class="sidebar-text-h1">Today</div>
                     <div class="show-number">5</div>
                 </div>
                 <div id="projects-div">
-                    <div class="main-sidebar-text">
-                        <h1>Projects</h1>
+                    <div id="main-sidebar-text-no-hover">
+                        <div class="sidebar-text-h1">Projects</div>
                         <div class="show-number">6</div>
                     </div>
                     <div id="subtype-wrapper">
                         <div class="subtype-sidebar-text">
-                            <h3>Bills</h3>
-                            <div class="show-number subtype-number">60</div>
+                            <div class="sidebar-text-h3">Bills</div>
+                            <div class="show-number">60</div>
                         </div>
                         <div class="subtype-sidebar-text">
-                            <h3>Work</h3>
-                            <div class="show-number subtype-number">4</div>
+                            <div class="sidebar-text-h3">Work</div>
+                            <div class="show-number">4</div>
                         </div>
                         <div class="subtype-sidebar-text">
-                            <h3>Gaming</h3>
-                            <div class="show-number subtype-number">3</div>
+                            <div class="sidebar-text-h3">Gaming</div>
+                            <div class="show-number">3</div>
                         </div>
                     </div>
                 </div>
-                <div class ="main-sidebar-text notes-div"><h1>Notes</h1></div>
+                <div class= "main-sidebar-text sidebar-text-h1 notes-div">Notes</div>
             </div>
             <div id="add-btn">+</div>
-        </div>
+        </div>  -->
 
-        <div class="content-div">
-            <div class="example-div" id="example-div-1">
+        <!-- <div class="content-div content-div-flex"  id="main-content"> -->
+            <!-- <div class="task-div" id="task-div-1">
                 <div class="left-side">
-                    <div class="checkbox-div" id="checkbox1"></div>
+                    <div class="checkbox-div"></div>
                     <div class="task-text-div">get mail</div>
                 </div>
                 <div class="right-side">
@@ -69,9 +70,9 @@
                 </div>
             </div>
 
-            <div class="example-div" id="example-div-2">
+            <div class="task-div" id="task-div-2">
                 <div class="left-side">
-                    <div class="checkbox-div" id="checkbox2"></div>
+                    <div class="checkbox-div"></div>
                     <div class="task-text-div">take trash out</div>
                 </div>
                 <div class="right-side">
@@ -87,23 +88,26 @@
             </div>
         </div> -->
 
-        <div id="create-new-task-popup">
-            <div class="topbar topbar-create-todo-popup">
+
+
+        <!-- <div id="create-new-task-popup"> -->
+            <!-- <div class="topbar topbar-create-todo-popup">
                 <h1>Create a new...</h1>
-                <object type="image/svg+xml" class="create-new-close" data="../image/pen-to-square-regular.svg"></object>
+                <object type="image/svg+xml" class="create-new-close" data="../image/x-svg.svg"></object>
             </div>
             <div class="sidebar sidebar-create-todo-popup">
                 <div class="main-sidebar-text-wrapper">
-                    <div class="main-sidebar-text option-text todo-option"><h1>To do</h1></div>
-                    <div class="main-sidebar-text option-text project-option"><h1>Project</h1></div>
-                    <div class="main-sidebar-text option-text note-option"><h1>Note</h1></div>
+                    <div class="option-text todo-option">To do</div>
+                    <div class="option-text project-option">Project</div>
+                    <div class="option-text note-option">Note</div>
                 </div>
-            </div>
-            <div class="content-create-todo-popup">
+            </div> -->
+
+            <!-- create todo popup -->
+            <!-- <div class="right-side-of-popup">
                 <div class="input-wrapper-div">
                     <input class="title-input" placeholder="Title: Pay bills" /> 
-                    <!-- placeholder should be distint to each option: todo / project / note -->
-                    <input class="details-input" placeholder="Details: electricity, gas, insurance." />
+                    <input class="details-input" id="todo-details-input" placeholder="Details: electricity, gas, insurance." />
                 </div>
                 <div id="date-priority-wrapper-div">
                     <div id="date-priority-wrapper-div-child">
@@ -119,13 +123,150 @@
                                     <div class="btn-div priority-div" id="medium-priority-div">MEDIUM</div>
                                     <div class="btn-div priority-div" id="high-priority-div">HIGH</div>
                                 </div>
-                                <div class="btn-div general-green-btn priority-div add-todo-btn">ADD TO DO</div>
+                                <div class="btn-div general-green-btn add-todo-btn">ADD TO DO</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div> -->
+
+            <!-- create project popup -->
+            <!-- <div class="right-side-of-popup">
+                <div class="input-wrapper-div">
+                    <input class="title-input" placeholder="Title: School Project X" /> 
+                </div>
+                <div class="right-side-submit-btn-div">
+                    <div class="btn-div general-green-btn create-project-note-btn">CREATE PROJECT</div>
+                    <p></p>
+                </div>
+            </div> -->
+
+
+            <!-- create note popup -->
+            <!-- <div class="right-side-of-popup">
+                <div class="input-wrapper-div">
+                    <input class="title-input" placeholder="Title: when cooking, add sugar to soup" /> 
+                    <input class="details-input" id="note-details-input" placeholder="Details" />
+                </div>
+                <div class="right-side-submit-btn-div">
+                    <div class="btn-div general-green-btn create-project-note-btn">CREATE NOTE</div>
+                    <p></p>
+                </div>
+            </div> -->
+        <!-- </div> -->
+
+        <!-- <div class="content-div content-div-grid"  id="project-content">
+            <div class="grid">
+                <div class="grid-col grid-col--1">
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">water the plant</div>
+                        <div class="note-paragraph">in the morning and evening water aloe vera with 0.25L</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">feed george</div>
+                        <div class="note-paragraph">once per day replace water and check for new food</div>
+                    </div>
+                </div>
+                <div class="grid-col grid-col--2">
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">title</div>
+                        <div class="note-paragraph">edit title and details of your note</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">check new online shop</div>
+                        <div class="note-paragraph">https://....</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">another note example</div>
+                        <div class="note-paragraph">example note that shows off style similar to Pinterest</div>
+                    </div>
+                </div>
+                <div class="grid-col grid-col--3">
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">cake ingredients</div>
+                        <div class="note-paragraph">bread eggs water flour baking soda vanilla essence sugar virgin oil milk</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">cars i like</div>
+                        <div class="note-paragraph">ford mustang 1967</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">friends to add to new chat group</div>
+                        <div class="note-paragraph">monika greg florian ewen bo manuel</div>
+                    </div>
+                    <div class="example-note">
+                        <object type="image/svg+xml" id="create-note-close" data="../image/x-svg.svg"></object>
+                        <div class="note-title">types of drone birds</div>
+                        <div class="note-paragraph">Multi-Rotor, Fixed-Wing, Single Rotor, Hybrid VTOL</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </div> -->
+
+
+
+        <!-- edit popup code -->
+        <!-- <div class="right-side-of-popup edit-popup">
+            <object type="image/svg+xml" id="create-edit-close" data="../image/x-svg.svg"></object>
+            <div id="textarea-wrapper-div">
+                <textarea class="title-input">Pay Bills</textarea>
+                <textarea class="details-input" id="todo-details-input">electricity, gas, insurance.</textarea>
+            </div>
+            <div id="date-priority-wrapper-div">
+                <div id="date-priority-wrapper-div-child">
+                    <div class="shared-display-flex-gap-10px" id="due-date-div">
+                        <h3>Due Date:</h3>
+                        <input type="date" class="btn-div todo-date-class" id="new-todo-date-input">
+                    </div>
+                    <div class="shared-display-flex-gap-10px" id="priority-div-parent">
+                        <h3>Priority:</h3>
+                        <div class="shared-display-flex-gap-10px" id="priority-divs-wrapper-parent">
+                            <div class="shared-display-flex-gap-10px" id="priority-divs-wrapper-child">
+                                <div class="btn-div priority-div" id="low-priority-div">LOW</div>
+                                <div class="btn-div priority-div" id="medium-priority-div">MEDIUM</div>
+                                <div class="btn-div priority-div" id="high-priority-div">HIGH</div>
+                            </div>
+                            <div class="btn-div general-green-btn confirm-changes-btn">CONFIRM CHANGES</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+        <!-- details popup code -->
+        <!-- <div id="details-popup">
+            <object type="image/svg+xml" id="create-details-close" data="../image/x-svg.svg"></object>
+            <div id="details-popup-text-wrapper">
+                <div id="details-popup-title">Pay Bills</div>
+                <div id="details-popup-about-wrapper">
+                    <div id="details-popup-project">
+                        <span id="details-popup-category">Project:</span>
+                        <span>today</span>
+                    </div>
+                    <div id="details-popup-priority">
+                        <span id="details-popup-urgency">Priority:</span>
+                        <span>Medium</span>
+                    </div>
+                    <div id="details-popup-due-date">
+                        <span id="details-popup-deadline">Due Date:</span>
+                        <span>June 9th, 2021</span>
+                    </div>
+                    <div id="details-popup-details">
+                        <span id="details-popup-more">Details:</span>
+                        <span>electricity, gas, insurance.</span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- </div> -->
 </body>
 </html>
