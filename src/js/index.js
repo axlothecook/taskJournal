@@ -139,7 +139,7 @@ const Functionalities = (function () {
                 divArray.push(div);
 
                 if(divArray.length > 1) {
-                    divArray[0].classList.remove(divArray[0].classList[3]);
+                    divArray[0].classList.remove(divArray[0].classList[1]);
                     divArray.splice(0, 1);
                 };
                 divArray[0].classList.add(classToSet);
@@ -314,7 +314,7 @@ const GUIManager = (function () {
                         addToDoBtn.textContent = 'ADD TO DO';
                         sharedDisplayFlex3Parent.appendChild(addToDoBtn);
                         addToDoBtn.addEventListener('click', function (e) {
-                            factory.createTask(titleInput.value, detailsInput.value, todoDateInput.value, clickedDiv.classList[2]);
+                            factory.createTask(titleInput.value, detailsInput.value, todoDateInput.value, clickedDiv.classList[3]);
                             let closePrent = parent;
                             closePrent.remove();
 
