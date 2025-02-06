@@ -103,8 +103,6 @@ const mouseAction = (function() {
 
     return { 
         hover,
-        applyStyle,
-        removeStyle,
         onOptionTextHover,
     }
 })();
