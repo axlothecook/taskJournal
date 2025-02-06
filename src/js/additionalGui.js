@@ -1,14 +1,20 @@
 const Toggle = (function() {
-    const button = (checkbox, targetDiv, textDiv) => {
-        if (checkbox.classList.contains('active')) {
-            checkbox.classList.remove('active');
-            targetDiv.style.opacity = '1';
-            return textDiv.style.textDecoration = 'none';
+    let projectVar;
+    const button = (object) => {
+        if (object.checkboxDiv.classList.contains('active')) {
+            object.checkboxDiv.classList.remove('active');
+            object.taskDiv.style.opacity = '1';
+            object.addTaskToCategory(object.task, 'increase');
+            object.addTaskToProject(projectVar, object.task.title, object.task.details, object.task.dueDate, object.task.priority);
+            object.createCategories();
+            return object.taskTextDiv.style.textDecoration = 'none';
         };
                     
-        checkbox.classList.add('active');
-        targetDiv.style.opacity = '0.5';
-        return textDiv.style.textDecoration = 'line-through';
+        object.checkboxDiv.classList.add('active');
+        object.taskDiv.style.opacity = '0.5';
+        projectVar = object.deleteTask(object.task);
+        object.createCategories();
+        return object.taskTextDiv.style.textDecoration = 'line-through';
     };
 
     return { button };
@@ -17,31 +23,13 @@ const Toggle = (function() {
 
 const Change = (function() {
     const borderStyle = (div, target) => {
-        return (div.urgency === 'low') ? target.classList.add('border-green') : (div.urgency === 'medium') ? target.classList.add('border-orange') : target.classList.add('border-red');
+        return (div.priority === 'low') ? target.classList.add('border-green') : (div.priority === 'mid') ? target.classList.add('border-orange') : target.classList.add('border-red');
     }
 
     return { borderStyle };
 
 })();
 
-const FadeIn = (function() {
-    const fadeIn = (div) => {
-        let opacity = 0;
-        // popup.style.opacity = '0'; //doesnt really work
-
-        let interval = setInterval(function() {
-            if (opacity < 1) {
-            opacity += 0.2;
-            div.style.opacity = opacity;
-            } else {
-                clearInterval(interval);
-                div.showModal();
-            };
-        }, 30);
-    };
-
-    return { fadeIn };
-})();
 
 const FadeOut = (function() {
     const fadeOut = (div) => {
@@ -60,18 +48,16 @@ const FadeOut = (function() {
     return { fadeOut };
 
 })();
+//     const deleteCurrentTodo = (div, target) => {
+//         target.remove();
+//         return taskManager.removeTask(div);  //change
+//     }
 
-const deleteTodo = (function() {
-    const deleteCurrentTodo = (div, target) => {
-        target.remove();
-        return taskManager.removeTask(div);  //change
-    }
+//     return { deleteCurrentTodo }
 
-    return { deleteCurrentTodo }
+// })();
 
-})();
-
-const createRightSide = (function() {
+const popupRightSide = (function() {
     const side = (parent) => {
         const rightSideOfPopup = document.createElement('div');
         rightSideOfPopup.classList.add('right-side-of-popup'); //fix
@@ -82,3 +68,78 @@ const createRightSide = (function() {
     return { side };
 
 })();
+
+const mouseAction = (function() {
+    const hover = (parent, child1, child2) => {
+        parent.addEventListener('mouseover', function() {
+            child1.classList.add('blue-clr1');
+            child2.classList.add('white-clr1');
+        });
+
+        parent.addEventListener('mouseout', function() {
+            child1.classList.remove('blue-clr1');
+            child2.classList.remove('white-clr1');
+        });
+    };
+
+    const optionHoverParent = () => {
+        let divArray = [];
+
+        return function result (div, classToAdd) {
+            divArray.push(div);
+
+            div.addEventListener('click', function (e) {
+                divArray.forEach((item) => {
+                    item.classList.remove(classToAdd);
+                });
+                this.classList.add(classToAdd);
+            });
+
+        };
+
+    };
+
+    let onOptionTextHover = optionHoverParent();
+
+    return { 
+        hover,
+        applyStyle,
+        removeStyle,
+        onOptionTextHover,
+    }
+})();
+
+const ChangeBtnColor = (function(){
+    let arr = [];
+    let clickedBtn;
+    const set = (btn1, btn2, btn3) => {
+        arr = [btn1, btn2, btn3];
+        arr.forEach(object => {
+            object.btn.addEventListener('click', function() {
+                arr.forEach(object => {
+                    if(object.btn.classList.length === 4) object.btn.classList.remove(object.btn.classList[3]);
+                });
+                object.btn.classList.add(object.classToAdd);
+                clickedBtn = object.btn.classList[2];
+            });
+        });
+    };
+
+    const returnClickedBtn = () => { return clickedBtn; }
+
+
+    return { 
+        set,
+        returnClickedBtn
+    }
+})();
+
+
+export {
+    Toggle,
+    Change,
+    FadeOut,
+    popupRightSide,
+    mouseAction,
+    ChangeBtnColor
+}

@@ -1,26 +1,34 @@
 import '/src/css/style.css';
-import { setDate } from 'date-fns';
-// import '/image';
-let closeSvgVar = '/image/x-svg.svg';
-let trashSvgVar = '/image/trash-can-regular.svg';
-let editSvgVar = '/image/pen-to-square-regular.svg';
+import { format } from 'date-fns';
+import closeSvgVar from '/image/x-svg.svg';
+import trashSvgVar from '/image/trash-can-regular.svg';
+import editSvgVar from '/image/pen-to-square-regular.svg';
 import {
     projectFactory,
     categoryFactory,
     noteFactory
-} from './redone.js'
+} from './redone.js';
+
+import {
+    Toggle,
+    Change,
+    FadeOut,
+    popupRightSide,
+    mouseAction,
+    ChangeBtnColor
+} from './additionalGui.js';
 
 let wrapper = document.querySelector('#wrapper');
 
 const CreateNew = (function() {
     const createNew = () => {
-        const createNewTaskDiv = document.createElement('dialog');
-        createNewTaskDiv.setAttribute('id', 'create-new-task-popup');
-        wrapper.appendChild(createNewTaskDiv);
+        const createNewDiv = document.createElement('dialog');
+        createNewDiv.setAttribute('id', 'create-new-task-popup');
+        wrapper.appendChild(createNewDiv);
 
             const tobBarCreateTodo = document.createElement('div');
             tobBarCreateTodo.classList.add('topbar', 'topbar-create-todo-popup');
-            createNewTaskDiv.appendChild(tobBarCreateTodo);
+            createNewDiv.appendChild(tobBarCreateTodo);
 
                 const h1tobBarPopup = document.createElement('h1');
                 h1tobBarPopup.textContent = 'Create a new...';
@@ -29,21 +37,20 @@ const CreateNew = (function() {
 
                 const closeSvgDiv = document.createElement('div'); 
                 closeSvgDiv.classList.add('close-svg-div');
-                closeSvgDiv.addEventListener('click', function (e) {
-                    Functionalities.fadeOut(createNewTaskDiv);  //change
-                });
-
                 tobBarCreateTodo.appendChild(closeSvgDiv);
+                closeSvgDiv.addEventListener('click', function (e) {
+                    FadeOut.fadeOut(createNewDiv); 
+                });
 
                     const closeSvg = document.createElement('object');
                     closeSvg.setAttribute('type', 'image/svg+xml');
                     closeSvg.classList.add('close-x-svg');
-                    closeSvg.data = closeSvgVar;                          //put svg
+                    closeSvg.data = closeSvgVar;                        
                     closeSvgDiv.appendChild(closeSvg);
 
             const sidebarCreateTodo = document.createElement('div');
             sidebarCreateTodo.classList.add('sidebar', 'sidebar-create-todo-popup');
-            createNewTaskDiv.appendChild(sidebarCreateTodo);
+            createNewDiv.appendChild(sidebarCreateTodo);
 
                 const mainSidebarTextWrapper = document.createElement('div');
                 mainSidebarTextWrapper.classList.add('main-sidebar-text-wrapper');
@@ -53,44 +60,44 @@ const CreateNew = (function() {
                     createTodoOption.classList.add('option-text', 'todo-option');
                     createTodoOption.textContent = 'To Do';
                     mainSidebarTextWrapper.appendChild(createTodoOption);
-                    Functionalities.onOptionTextHover(createTodoOption, 'mouseOn');
+                    mouseAction.onOptionTextHover(createTodoOption, 'mouseOn');
 
                     //project and note option
                     const createProjectOption = document.createElement('div');
                     createProjectOption.classList.add('option-text', 'project-option');
                     createProjectOption.textContent = 'Project';
                     mainSidebarTextWrapper.appendChild(createProjectOption);
-                    Functionalities.onOptionTextHover(createProjectOption, 'mouseOn');
+                    mouseAction.onOptionTextHover(createProjectOption, 'mouseOn');
 
                     const createNoteOption = document.createElement('div');
                     createNoteOption.classList.add('option-text', 'note-option');
                     createNoteOption.textContent = 'Note';
                     mainSidebarTextWrapper.appendChild(createNoteOption);
-                    Functionalities.onOptionTextHover(createNoteOption, 'mouseOn');
+                    mouseAction.onOptionTextHover(createNoteOption, 'mouseOn');
 
-            let div = Functionalities.createRightSideDiv(createNewTaskDiv); //change
-            CreateTodo.todo(div, createNewTaskDiv); //default
+            let div = popupRightSide.side(createNewDiv); 
+            CreateTodo.todo(div, createNewDiv); //default
             createTodoOption.classList.add('mouseOn');
 
             createTodoOption.addEventListener('click', function (e) {
                 div.remove();
-                div = Functionalities.createRightSideDiv(createNewTaskDiv);
-                CreateTodo.todo(div, createNewTaskDiv);
+                div = popupRightSide.side(createNewDiv);
+                CreateTodo.todo(div, createNewDiv);
             });
 
             createProjectOption.addEventListener('click', function (e) {
                 div.remove();
-                div = Functionalities.createRightSideDiv(createNewTaskDiv);
-                CreateProject.project(div, createNewTaskDiv);
+                div = popupRightSide.side(createNewDiv);
+                CreateProject.project(div, createNewDiv);
             });
 
             createNoteOption.addEventListener('click', function (e) {
                 div.remove();
-                div = Functionalities.createRightSideDiv(createNewTaskDiv);
-                CreateNote.note(div, createNewTaskDiv);
+                div = popupRightSide.side(createNewDiv);
+                CreateNote.note(div, createNewDiv);
             });
 
-        return createNewTaskDiv;
+        return createNewDiv;
     };
 
     return { createNew };
@@ -100,8 +107,6 @@ const CreateNew = (function() {
 
 const CreateTodo = (function() {
     const todo = (popup, parent) => {
-        let clickedDiv;
-
         const inputWrapperDiv = document.createElement('div');
         inputWrapperDiv.classList.add('input-wrapper-div');
         popup.appendChild(inputWrapperDiv);
@@ -112,11 +117,9 @@ const CreateTodo = (function() {
             titleInput.classList.add('title-input');
             inputWrapperDiv.appendChild(titleInput);
 
-            const detailsInput = document.createElement('input');
-            detailsInput.setAttribute('type', 'text');
+            const detailsInput = document.createElement('textarea');
             detailsInput.setAttribute('placeholder', 'Details: electricity, gas, insurance.');
             detailsInput.classList.add('details-input');
-            detailsInput.setAttribute('id', 'todo-details-input');
             inputWrapperDiv.appendChild(detailsInput);
 
         const datePriorityWrapperParent = document.createElement('div');
@@ -129,7 +132,6 @@ const CreateTodo = (function() {
 
                 const sharedDisplayFlex1 = document.createElement('div');
                 sharedDisplayFlex1.classList.add('shared-display-flex-gap-10px');
-                sharedDisplayFlex1.setAttribute('id', 'due-date-div');
                 datePriorityWrapperChild.appendChild(sharedDisplayFlex1);
 
                     const h3DueDate = document.createElement('h3');
@@ -139,7 +141,6 @@ const CreateTodo = (function() {
                     const todoDateInput = document.createElement('input');
                     todoDateInput.setAttribute('type', 'date');
                     todoDateInput.classList.add('btn-div', 'todo-date-class');
-                    todoDateInput.setAttribute('id', 'new-todo-date-input');
                     sharedDisplayFlex1.appendChild(todoDateInput);
 
                 const sharedDisplayFlex2Grandparent = document.createElement('div');
@@ -163,34 +164,54 @@ const CreateTodo = (function() {
 
                             const lowPriorityDiv = document.createElement('div');
                             lowPriorityDiv.classList.add('btn-div', 'priority-div', 'low');
-                            lowPriorityDiv.setAttribute('id', 'low-priority-div');
                             lowPriorityDiv.textContent = 'LOW';
                             sharedDisplayFlex4Grandchild.appendChild(lowPriorityDiv);
-                            clickedDiv = Functionalities.setInitialPriority(lowPriorityDiv, 'add-green'); //change
+                            // clickedDiv = changeBtnColor.initiate();
                             
                             const mediumPriorityDiv = document.createElement('div');
-                            mediumPriorityDiv.classList.add('btn-div', 'priority-div', 'medium');
-                            mediumPriorityDiv.setAttribute('id', 'medium-priority-div');
+                            mediumPriorityDiv.classList.add('btn-div', 'priority-div', 'mid');
                             mediumPriorityDiv.textContent = 'MEDIUM';
                             sharedDisplayFlex4Grandchild.appendChild(mediumPriorityDiv);
-                            clickedDiv = Functionalities.setInitialPriority(mediumPriorityDiv, 'add-orange'); //change
-
+                            // clickedDiv = changeBtnColor.initiate();
+                            
                             const highPriorityDiv = document.createElement('div');
                             highPriorityDiv.classList.add('btn-div', 'priority-div', 'high');
-                            highPriorityDiv.setAttribute('id', 'high-priority-div');
                             highPriorityDiv.textContent = 'HIGH';
                             sharedDisplayFlex4Grandchild.appendChild(highPriorityDiv);
-                            clickedDiv = Functionalities.setInitialPriority(highPriorityDiv, 'add-red'); //change
+                            // clickedDiv = changeBtnColor.initiate();
+
+                            let checker;
+                            const btnArr = [lowPriorityDiv, mediumPriorityDiv, highPriorityDiv];
+                            btnArr.forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    if(btn.classList.contains('low')) {
+                                        btn.classList.add('add-green');
+                                        if (checker != undefined) checker.classList.remove(checker.classList[3]);
+                                    } else if (btn.classList.contains('mid')) {
+                                        btn.classList.add('add-orange');
+                                        if (checker != undefined) checker.classList.remove(checker.classList[3]);
+                                    } else if(btn.classList.contains('high')) {
+                                        btn.classList.add('add-red');
+                                        if (checker != undefined) checker.classList.remove(checker.classList[3]);
+                                    };
+                                    checker = btn;
+                                });
+                            });
+                            
 
                         const addToDoBtn = document.createElement('div');
                         addToDoBtn.classList.add('btn-div', 'general-green-btn', 'add-todo-btn');
                         addToDoBtn.textContent = 'ADD TO DO';
                         sharedDisplayFlex3Parent.appendChild(addToDoBtn);
-                        addToDoBtn.addEventListener('click', function (e) { //change
-                            factory.createTask(titleInput.value, detailsInput.value, todoDateInput.value, clickedDiv.classList[3]);
-                            let closePrent = parent;
-                            closePrent.remove();
-
+                        addToDoBtn.addEventListener('click', function (e) {
+                            let object = {
+                                title: titleInput.value,
+                                details: detailsInput.value,
+                                duedate: todoDateInput.value,
+                                priority: checker.classList[2]
+                            }
+                            Manager.create(object);
+                            FadeOut.fadeOut(parent); 
                         });
         return popup;
     };
@@ -200,7 +221,7 @@ const CreateTodo = (function() {
 })();
 
 const CreateProject = (function() {
-    const project = (popup) => {
+    const project = (popup, parent) => {
         const inputWrapperDiv = document.createElement('div');
         inputWrapperDiv.classList.add('input-wrapper-div');
         popup.appendChild(inputWrapperDiv);
@@ -219,6 +240,11 @@ const CreateProject = (function() {
             createProjectBtn.classList.add('btn-div', 'general-green-btn', 'create-project-note-btn');
             createProjectBtn.textContent = 'CREATE PROJECT';
             rightSideSubmitBtnDiv.appendChild(createProjectBtn);
+            createProjectBtn.addEventListener('click', function() {
+                projectFactory.createProject(titleInput.value);
+                CreateCategories.callCategoryCreation();
+                FadeOut.fadeOut(parent); 
+            });
 
         return popup;
     };
@@ -228,7 +254,7 @@ const CreateProject = (function() {
 })();
 
 const CreateNote = (function() {
-    const note = (popup) => {
+    const note = (popup, parent) => {
         const inputWrapperDiv = document.createElement('div');
         inputWrapperDiv.classList.add('input-wrapper-div');
         popup.appendChild(inputWrapperDiv);
@@ -239,10 +265,9 @@ const CreateNote = (function() {
             titleInput.classList.add('title-input');
             inputWrapperDiv.appendChild(titleInput);
 
-            const detailsInput = document.createElement('input');
+            const detailsInput = document.createElement('textarea');
             detailsInput.setAttribute('placeholder', 'Details');
             detailsInput.classList.add('details-input');
-            detailsInput.setAttribute('id', 'note-details-input');
             inputWrapperDiv.appendChild(detailsInput);
 
         const rightSideSubmitBtnDiv = document.createElement('div');
@@ -253,6 +278,12 @@ const CreateNote = (function() {
             createNoteBtn.classList.add('btn-div', 'general-green-btn', 'create-project-note-btn');
             createNoteBtn.textContent = 'CREATE NOTE';
             rightSideSubmitBtnDiv.appendChild(createNoteBtn);
+            createNoteBtn.addEventListener('click', function() {
+                noteFactory.createNote(titleInput.value, detailsInput.value);
+                CreatePanel.notePanel();
+                CreateCategories.callCategoryCreation();
+                FadeOut.fadeOut(parent); 
+            });
 
         return popup;
     };
@@ -270,10 +301,10 @@ const DetailsDiv = (function() {
     
             const closeSvgDiv = document.createElement('div'); 
             closeSvgDiv.classList.add('close-svg-div');
-            closeSvgDiv.addEventListener('click', function (e) {
-                Functionalities.fadeOut(detailsPopUp);  //change
-            });
             detailsPopUp.appendChild(closeSvgDiv);
+            closeSvgDiv.addEventListener('click', function () {
+                FadeOut.fadeOut(detailsPopUp); 
+            });
     
             const closeSvg = document.createElement('object');
             closeSvg.setAttribute('type', 'image/svg+xml');
@@ -294,22 +325,8 @@ const DetailsDiv = (function() {
                 detailsAbout.setAttribute('id', 'details-popup-about-wrapper');
                 detailsPopupTextWrapper.appendChild(detailsAbout);
     
-                    const detailsPopupProject = document.createElement('div');
-                    detailsPopupProject.setAttribute('id', 'details-popup-project');
-                    detailsAbout.appendChild(detailsPopupProject);
-    
-                        const detailsPopupCategory = document.createElement('span');
-                        detailsPopupCategory.setAttribute('id', 'details-popup-category');
-                        detailsPopupCategory.textContent = 'Project: ';
-                        detailsPopupProject.appendChild(detailsPopupCategory);
-    
-                        const spanCategory = document.createElement('span');
-                        spanCategory.textContent = 'today';  //fix: input must be the project to which todo belongs to
-                        detailsPopupProject.appendChild(spanCategory);
-    
                     //////
                     const detailsPopupPriority = document.createElement('div');
-                    detailsPopupPriority.setAttribute('id', 'details-popup-priority');
                     detailsAbout.appendChild(detailsPopupPriority);
     
                         const detailsPopupUrgency = document.createElement('span');
@@ -318,12 +335,11 @@ const DetailsDiv = (function() {
                         detailsPopupPriority.appendChild(detailsPopupUrgency);
     
                         const spanPriority = document.createElement('span');
-                        spanPriority.textContent = target.urgency;
+                        spanPriority.textContent = target.priority;
                         detailsPopupPriority.appendChild(spanPriority);
     
                     //////
                     const detailsPopupDueDate = document.createElement('div');
-                    detailsPopupDueDate.setAttribute('id', 'details-popup-due-date');
                     detailsAbout.appendChild(detailsPopupDueDate);
     
                         const detailsPopupDeadline = document.createElement('span');
@@ -332,12 +348,11 @@ const DetailsDiv = (function() {
                         detailsPopupDueDate.appendChild(detailsPopupDeadline);
     
                         const spanDueDate = document.createElement('span');
-                        spanDueDate.textContent = `${format(new Date(target.deadline), 'MMMM')} ${format(new Date(targetTask.deadline), 'do')}, ${format(new Date(targetTask.deadline), 'yyyy')}`;
+                        spanDueDate.textContent = `${format(new Date(target.dueDate), 'MMMM')} ${format(new Date(target.dueDate), 'do')}, ${format(new Date(target.dueDate), 'yyyy')}`;
                         detailsPopupDueDate.appendChild(spanDueDate);
     
                     //////
                     const detailsPopupDescription = document.createElement('div');
-                    detailsPopupDueDate.setAttribute('id', 'details-popup-due-date');
                     detailsAbout.appendChild(detailsPopupDescription);
     
                         const detailsPopupMore = document.createElement('span');
@@ -346,7 +361,7 @@ const DetailsDiv = (function() {
                         detailsPopupDescription.appendChild(detailsPopupMore);
     
                         const spanDescription = document.createElement('span');
-                        spanDescription.textContent = target.description;
+                        spanDescription.textContent = target.details;
                         detailsPopupDescription.appendChild(spanDescription);
     
         return detailsPopUp;
@@ -356,35 +371,23 @@ const DetailsDiv = (function() {
     
 })();
 
-const FetchDetails = (function() {
-    const displayDetails = () => {
-        let popUp = DetailsDiv.details(targetTask);
-        Functionalities.fadeIn(popUp); //change
-    };
-
-    return { displayDetails };
-    
-})();
-
-// edits panel
 const EditDiv = (function() {
-    const edit = (target) => { b //change
-        let currentDiv;
+    const edit = (target) => { 
         const editPopUp = document.createElement('dialog');
         editPopUp.classList.add('right-side-of-popup', 'edit-popup');
         wrapper.appendChild(editPopUp);
 
         const closeSvgDiv = document.createElement('div'); 
         closeSvgDiv.classList.add('close-svg-div');
-        closeSvgDiv.addEventListener('click', function (e) {
-            Functionalities.fadeOut(editPopUp);                    //change
-        });
         editPopUp.appendChild(closeSvgDiv);
+        closeSvgDiv.addEventListener('click', function () {
+            FadeOut.fadeOut(editPopUp);                  
+        });
 
             const closeSvg = document.createElement('object');
             closeSvg.setAttribute('type', 'image/svg+xml');
             closeSvg.classList.add('close-x-svg');
-            closeSvg.data = closeSvgVar;                   //check if correct
+            closeSvg.data = closeSvgVar;                 
             closeSvgDiv.appendChild(closeSvg);
 
         const textAreaWrapper = document.createElement('div');
@@ -398,8 +401,7 @@ const EditDiv = (function() {
 
             const editDetailsArea= document.createElement('textarea');
             editDetailsArea.classList.add('details-input');
-            editDetailsArea.setAttribute('id', 'todo-details-input');
-            editDetailsArea.textContent = target.description;
+            editDetailsArea.textContent = target.details;
             textAreaWrapper.appendChild(editDetailsArea);
 
         const datePriorityWrapper = document.createElement('div');
@@ -412,18 +414,16 @@ const EditDiv = (function() {
 
                 const sharedDisplay1 = document.createElement('div');
                 sharedDisplay1.classList.add('shared-display-flex-gap-10px');
-                sharedDisplay1.setAttribute('id', 'due-date-div');
                 datePriorityWrapperChild.appendChild(sharedDisplay1);
 
                     const h3DueDate = document.createElement('h3');
-                    h3DueDate.textContent = 'Due Date:';                        //set
+                    h3DueDate.textContent = 'Due Date';                
                     sharedDisplay1.appendChild(h3DueDate);
 
                     const editDateInput = document.createElement('input');
                     editDateInput.setAttribute('type', 'date');
                     editDateInput.classList.add('btn-div', 'todo-date-class');
-                    editDateInput.setAttribute('id', 'new-todo-date-input');
-                    editDateInput.valueAsDate = new Date(target.deadline);
+                    editDateInput.valueAsDate = new Date(target.dueDate);
                     sharedDisplay1.appendChild(editDateInput);
 
                 const sharedDisplay2Parent = document.createElement('div');
@@ -447,48 +447,66 @@ const EditDiv = (function() {
 
                             let lowPriorityDiv = document.createElement('div');
                             lowPriorityDiv.classList.add('btn-div', 'priority-div', 'low');
-                            lowPriorityDiv.setAttribute('id', 'low-priority-div');
                             lowPriorityDiv.textContent = 'LOW';
                             sharedDisplay2ChildChild.appendChild(lowPriorityDiv);
-                            Functionalities.setPriority(targetTask, lowPriorityDiv, 'add-green');   //change
 
-                            currentDiv = Functionalities.setInitialPriority(lowPriorityDiv, 'add-green');
-                            console.log('current div (green): ');
-                            console.log(currentDiv);
 
                             let mediumPriorityDiv = document.createElement('div');
-                            mediumPriorityDiv.classList.add('btn-div', 'priority-div', 'medium');
-                            mediumPriorityDiv.setAttribute('id', 'medium-priority-div');
+                            mediumPriorityDiv.classList.add('btn-div', 'priority-div', 'mid');
                             mediumPriorityDiv.textContent = 'MEDIUM';
                             sharedDisplay2ChildChild.appendChild(mediumPriorityDiv);
-                            Functionalities.setPriority(targetTask, mediumPriorityDiv, 'add-orange');   //change
 
-                            currentDiv = Functionalities.setInitialPriority(mediumPriorityDiv, 'add-orange');
-                            console.log('current div (orange): ');
-                            console.log(currentDiv);
 
                             let highPriorityDiv = document.createElement('div');
                             highPriorityDiv.classList.add('btn-div', 'priority-div', 'high');
-                            highPriorityDiv.setAttribute('id', 'high-priority-div');
                             highPriorityDiv.textContent = 'HIGH';
                             sharedDisplay2ChildChild.appendChild(highPriorityDiv);
-                            Functionalities.setPriority(targetTask, highPriorityDiv, 'add-red');    //change
 
-                            currentDiv = Functionalities.setInitialPriority(highPriorityDiv, 'add-red');  //change 
-                            console.log('current div (red): ');
-                            console.log(currentDiv);
+                            let selectedBtn;
+                            if(target.priority === 'low') {
+                                lowPriorityDiv.classList.add('add-green');
+                                selectedBtn = lowPriorityDiv.classList[2];
+                            } else if(target.priority === 'mid') {
+                                mediumPriorityDiv.classList.add('add-orange');
+                                selectedBtn = mediumPriorityDiv.classList[2];
+                            } else if(target.priority === 'high') {
+                                highPriorityDiv.classList.add('add-red');
+                                selectedBtn = highPriorityDiv.classList[2];
+                            };
+
+                            let btn1 = {
+                                btn: lowPriorityDiv,
+                                classToAdd: 'add-green',
+                            };
+                            let btn2 = {
+                                btn: mediumPriorityDiv,
+                                classToAdd: 'add-orange',
+                            };
+                            let btn3 = {
+                                btn: highPriorityDiv,
+                                classToAdd: 'add-red',
+                            };
+
+                            ChangeBtnColor.set(btn1, btn2, btn3);
 
                     const confirmChangesBtn = document.createElement('div');
                     confirmChangesBtn.classList.add('btn-div', 'general-green-btn', 'confirm-changes-btn');
                     confirmChangesBtn.textContent = 'CONFIRM CHANGES';
-                    confirmChangesBtn.addEventListener('click', function (e) {   
-                        console.log('currentDiv.classList[2]:');
-                        console.log(currentDiv.classList[2]);    //change    
-                        console.log(currentDiv);          
-                        Functionalities.updateCurrentObject(targetTask, editTitleArea.textContent, editDetailsArea.textContent, editDateInput.valueAsDate, currentDiv.classList[2]);  //change
-                        Functionalities.fadeOut(editPopUp);     //change
-                    });
                     sharedDisplay2ChildParent.appendChild(confirmChangesBtn);
+                    confirmChangesBtn.addEventListener('click', function () {   
+                        let classToPass = ChangeBtnColor.returnClickedBtn();
+                        if (classToPass != undefined) selectedBtn = classToPass;
+                        let object = {
+                            target: target,
+                            title: editTitleArea.value,
+                            details: editDetailsArea.value,
+                            dueDate: editDateInput.value,
+                            priority: selectedBtn
+                        }
+                        Manager.manageTaskUpdate(object);
+                        FadeOut.fadeOut(editPopUp);   
+                    });
+                    
 
         return editPopUp;
     
@@ -498,23 +516,12 @@ const EditDiv = (function() {
     
 })();
 
-const FetchEdit = (function() {
-    const displayEdit = () => {
-        let popUp = EditDiv.edit(targetTask);
-        // add fade in / fade out animation
-        popUp.showModal();
-    };
-
-    return { displayEdit };
-    
-})();
-
 // each task
-const CreateTask = (function() {
+const TaskGUI = (function() {          
     const task = (target) => {
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task-div');
-        Functionalities.changeBorderStyle(task, taskDiv);  //change
+        Change.borderStyle(target, taskDiv); 
 
             const leftSide = document.createElement('div');
             leftSide.classList.add('left-side');
@@ -530,7 +537,17 @@ const CreateTask = (function() {
                 leftSide.appendChild(taskTextDiv);
 
                 checkboxDiv.addEventListener('click', function (e) {
-                    Functionalities.toggleButtonCheck(checkboxDiv, taskDiv, taskTextDiv); //change
+                    let object = {
+                        checkboxDiv: checkboxDiv,
+                        taskDiv: taskDiv,
+                        taskTextDiv: taskTextDiv,
+                        createCategories: CreateCategories.callCategoryCreation,
+                        deleteTask: categoryFactory.deleteOneTask,
+                        task: target,
+                        addTaskToCategory: categoryFactory.addTask,
+                        addTaskToProject: projectFactory.createTask
+                    }
+                    Toggle.button(object); 
                 });
 
             const rightSide = document.createElement('div');
@@ -540,40 +557,45 @@ const CreateTask = (function() {
                 const detailsDiv = document.createElement('div');
                 detailsDiv.classList.add('btn-div', 'general-green-btn', 'details-div');
                 detailsDiv.textContent = 'DETAILS';
-                detailsDiv.addEventListener('click', function (e) {
-                    FetchDetails.displayDetails(task);
-                });
                 rightSide.appendChild(detailsDiv);
+                detailsDiv.addEventListener('click', function () {
+                    let modal = DetailsDiv.details(target);
+                    modal.showModal();
+                    // DetailsDiv.details(target);
+                });
 
                 const dateDisplayDiv = document.createElement('div');
                 dateDisplayDiv.classList.add('date-display-div');
-                dateDisplayDiv.textContent = `${format(new Date(task.deadline), 'MMM')} ${format(new Date(task.deadline), 'do')}`;     //check           
+                dateDisplayDiv.textContent = `${format(new Date(target.dueDate), 'MMM')} ${format(new Date(target.dueDate), 'do')}`;       
                 rightSide.appendChild(dateDisplayDiv);
 
                 const editSvgDiv = document.createElement('div');
                 editSvgDiv.classList.add('edit-svg-div');
-                editSvgDiv.addEventListener('click', function (e) {
-                    FetchEdit.displayEdit(task);
-                });
                 rightSide.appendChild(editSvgDiv);
+                editSvgDiv.addEventListener('click', function () {
+                    let modal = EditDiv.edit(target);;
+                    modal.showModal();
+                });
 
                     const editSvg = document.createElement('object');
                     editSvg.setAttribute('type', 'image/svg+xml');
                     editSvg.classList.add('svg-div');
-                    editSvg.data = editSvgVar;                          //check if correct
+                    editSvg.data = editSvgVar;                         
                     editSvgDiv.appendChild(editSvg);
 
                 const trashSvgDiv = document.createElement('div');
                 trashSvgDiv.classList.add('trash-svg-div');
-                trashSvgDiv.addEventListener('click', function(e) {
-                    Functionalities.deleteCurrentTodo(task, taskDiv); //change
-                });
                 rightSide.appendChild(trashSvgDiv);
+                trashSvgDiv.addEventListener('click', function(e) {
+                    categoryFactory.deleteOneTask(target);
+                    FadeOut.fadeOut(taskDiv); 
+                    CreateCategories.callCategoryCreation();
+                });
 
                     const trashSvg = document.createElement('object');
                     trashSvg.setAttribute('type', 'image/svg+xml');
                     trashSvg.classList.add('svg-div');
-                    trashSvg.data = trashSvgVar;         //check if correct
+                    trashSvg.data = trashSvgVar;         
                     trashSvgDiv.appendChild(trashSvg);
 
         return taskDiv;
@@ -583,52 +605,406 @@ const CreateTask = (function() {
     
 })();
 
-const FetchTask = (function() {
-    const displayTask = () => {
-        document.querySelector('#main-content').appendChild(CreateTask.task(task));
+const NoteGui = (function() {
+    const create = (target) => {
+        const noteItself = document.createElement('div');
+        noteItself.classList.add('example-note');
+        
+            const closeSvgDiv = document.createElement('div'); 
+            closeSvgDiv.classList.add('close-svg-div');
+            noteItself.appendChild(closeSvgDiv);
+            closeSvgDiv.addEventListener('click', function (e) {
+                noteFactory.deleteNote(target);
+                FadeOut.fadeOut(noteItself); 
+                CreatePanel.notePanel();
+                CreateCategories.callCategoryCreation();
+            });
+
+                const closeSvg = document.createElement('object');
+                closeSvg.setAttribute('type', 'image/svg+xml');
+                closeSvg.classList.add('close-x-svg');
+                closeSvg.data = closeSvgVar;
+                closeSvgDiv.appendChild(closeSvg);
+
+            const title = document.createElement('textarea');
+            title.classList.add('note-title');
+            title.value = target.title;
+            noteItself.appendChild(title);
+            title.addEventListener('input', function (e) {
+                noteFactory.editNote(target, 'title', e.target.value);
+                CreatePanel.autoResize(this);
+            });
+
+            const details = document.createElement('textarea');
+            details.classList.add('note-paragraph');
+            details.value = target.details;
+            noteItself.appendChild(details);
+            details.addEventListener('input', function (e) {
+                noteFactory.editNote(target, 'details', e.target.value);
+                CreatePanel.autoResize(this);
+            });
+
+        return noteItself;
+
     };
 
-    return { displayTask };
+    return { create }
+})();
+
+const Manager = (function(){
+    var callerVar;
+    var parentVar;
+    var objectVar;
+
+    const fetchCaller = (parent, caller, object) => {
+        callerVar = caller;
+        parentVar = parent;
+        objectVar = object;
+    }
+
+    const create = (object) => {
+        categoryFactory.createTask(object.title, object.details, object.duedate, object.priority);
+        //this condition is for when the user creates a note without clicking on specific category / project
+        if(callerVar != undefined) {
+            if(callerVar.classList.contains('project')){
+                projectFactory.createTask(objectVar, object.title, object.details, object.duedate, object.priority);
+                CreatePanel.generalPanel(parentVar, projectFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+            } else CreatePanel.generalPanel(parentVar, categoryFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+        } else {
+            objectVar = categoryFactory.getCategories()[0];
+            parentVar = document.querySelector('.content-div');
+            CreatePanel.generalPanel(parentVar, categoryFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+        }
+        CreateCategories.callCategoryCreation();
+    }
+
+    const manageTaskUpdate = (object) => {
+        categoryFactory.updateTask(object.target, 'title', object.title);
+        categoryFactory.updateTask(object.target, 'details', object.details);
+        categoryFactory.updateTask(object.target, 'dueDate', object.dueDate);
+        categoryFactory.updateTask(object.target, 'priority', object.priority);
+
+        updatePanelAfterTaskEdit();
+    }
+
+    const updatePanelAfterTaskEdit = () => {
+        if(callerVar != undefined) {
+            if(callerVar.classList.contains('project')){
+                CreatePanel.generalPanel(parentVar, projectFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+            } else CreatePanel.generalPanel(parentVar, categoryFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+        } else {
+            objectVar = categoryFactory.getCategories()[0];
+            parentVar = document.querySelector('.content-div');
+            CreatePanel.generalPanel(parentVar, categoryFactory.getAll(objectVar.title), TaskGUI.task, 'tasks');
+        }
+        CreateCategories.callCategoryCreation();
+    }
+
+    return {
+        fetchCaller,
+        create,
+        manageTaskUpdate,
+        updatePanelAfterTaskEdit
+    }
+
+})();
+
+
+const CreatePanel = (function() {
+    var parentVar;
+
+    const addListener = (parent, caller, func1, func2, keyword, object) => {
+        caller.addEventListener('click', function (e) {
+            Manager.fetchCaller(parent, caller, object);
+            generalPanel(parent, func1, func2, keyword);
+        });
+    };
+
+    const generalPanel = (parent, func1, func2, keyword) => {
+        if (parent != 0) parentVar = parent;
+        if (func1 === undefined) return;
+        let obj = {
+            array: func1,
+            function: func2
+        };
+        if(obj.array === 0) {
+            clearPanel(parentVar);
+            emptyMsg(parentVar, keyword);
+            return;
+        };
+        clearPanel(parentVar);
+        parentVar.classList.add('content-div-flex');
+        let arr = obj.array;
+        arr.forEach(item => {
+            parent.prepend(obj.function(item));
+        });
+    };
+
+    const emptyMsg = (parent, target) => {
+        const emptyMsgContainer = document.createElement('div');
+        emptyMsgContainer.classList.add('empty-msg-container');
+        parent.appendChild(emptyMsgContainer);
+
+            const h1 = document.createElement('h1');
+            h1.classList.add('sidebar-text-h3');
+            h1.textContent = `Oh! Looks like there are no ${target} here right now. Wanna add one?`;
+            emptyMsgContainer.appendChild(h1);
+
+            const addBtn = document.createElement('div');
+            addBtn.setAttribute('id', 'add-btn');
+            addBtn.textContent = '+';
+            emptyMsgContainer.appendChild(addBtn);
+            addBtn.addEventListener('click', function (e) {
+                let modal = CreateNew.createNew();
+                modal.showModal();
+            });
+
+            return emptyMsgContainer;
+    };
+
+    const createColumns = (parent) => {
+        // removes all content in parent
+        clearPanel(parent);
+        parent.classList.add('content-div-grid');
+
+        const column1 = document.createElement('div');
+        column1.classList.add('grid-col', 'grid-col--1');
+        parent.appendChild(column1);
+
+        const column2 = document.createElement('div');
+        column2.classList.add('grid-col', 'grid-col--2');
+        parent.appendChild(column2);
+
+        const column3 = document.createElement('div');
+        column3.classList.add('grid-col', 'grid-col--3');
+        parent.appendChild(column3);
+
+        const column4 = document.createElement('div');
+        column4.classList.add('grid-col', 'grid-col--4');
+        parent.appendChild(column4);
+
+        let object = {
+            parentvar: parent,
+            column1Var: column1,
+            column2Var: column2,
+            column3Var: column3,
+            column4Var: column4,
+            counter: 0
+        };
+
+        return object;
+
+    };
+
+    const appendToPanel = (note, obj) => {
+        if (obj.counter === 0) {
+            obj.column1Var.appendChild(note);
+            obj.counter++;
+        } else if (obj.counter === 1) {
+            obj.column2Var.appendChild(note);
+            obj.counter++;
+        } else if (obj.counter === 2) {
+            obj.column3Var.appendChild(note);
+            obj.counter++;
+        } else if (obj.counter === 3) {
+            obj.column4Var.appendChild(note);
+            obj.counter = 0;
+        };
+    };
+
+    const autoResize = (element) => {
+        element.style.height = '10px';
+        element.style.height = element.scrollHeight + 'px';
+    }
+
+    const clearPanel = (parent) => {
+        var parentHolder = parent;
+        if(parentHolder.classList.length > 1) {
+            while(parentHolder.firstChild) {
+                parentHolder.removeChild(parentHolder.lastChild);
+            };
+            parentHolder.classList.remove(parentHolder.classList[1]);
+        } else parentHolder.textContent = '';
+        return parentHolder;
+    };
+
+    const notePanel = (parent = 0) => {
+        if (parent != 0) parentVar = parent;
+        let obj = {
+            array: noteFactory.getAll(),
+            function: NoteGui.create
+        };
+        if(obj.array === 0) {
+            clearPanel(parentVar);
+            emptyMsg(parentVar, 'notes');
+            return;
+        };                            
+        let arr = obj.array;
+        arr = arr.reverse();
+        let object = createColumns(parentVar);
+        arr.forEach(item => appendToPanel(obj.function(item), object));
+        let titles = document.getElementsByClassName('note-title');
+        let details = document.getElementsByClassName('note-paragraph');
+        let elements = [...titles, ...details]
+        for (var item of elements) { 
+            autoResize(item);
+        };
+    };
+
+    return { 
+        addListener,
+        autoResize,
+        emptyMsg,
+        createColumns,
+        appendToPanel,
+        generalPanel,
+        clearPanel,
+        notePanel 
+    };
     
 })();
 
-const CreateProjectPanel = (function() {
-    const project = (target) => {
-        //code
-        return target;
-    };
+const CreateProjects = (function(){
+    const parentProject = (contentDiv, parent) => {
+        const projectsDiv = document.createElement('div');
+        projectsDiv.setAttribute('id', 'projects-div');
+        parent.appendChild(projectsDiv);
 
-    return { project };
+            const mainSidebarTextNoHover = document.createElement('div');
+            mainSidebarTextNoHover.setAttribute('id', 'main-sidebar-text-no-hover');
+            projectsDiv.appendChild(mainSidebarTextNoHover);
+
+                const projectSideText = document.createElement('div');
+                projectSideText.setAttribute('id', 'sidebar-text-h1-project');
+                projectSideText.textContent = 'Projects';
+                mainSidebarTextNoHover.appendChild(projectSideText);
+            
+            const subtypeWrapper = document.createElement('div');
+            subtypeWrapper.setAttribute('id', 'subtype-wrapper');
+            projectsDiv.appendChild(subtypeWrapper);
+
+            var projectArr = projectFactory.getProjects();
+            if (projectArr.length === undefined) return;
+            projectArr.forEach(object => {
+                project(contentDiv, subtypeWrapper, object);
+            });
+    }
+
+    const project = (contentDiv, parent, object) => {
+        const subtypeSidebarText = document.createElement('div');
+        subtypeSidebarText.classList.add('subtype-sidebar-text', 'project', `${object.title}`);
+        parent.appendChild(subtypeSidebarText);
+
+            const project = document.createElement('div');
+            project.classList.add('sidebar-text-h3');
+            project.textContent = object.title;
+            subtypeSidebarText.appendChild(project);
+
+                const holder = document.createElement('div');
+                holder.classList.add('holder-right-div');
+                subtypeSidebarText.appendChild(holder);
+
+                    const trashSvgDiv = document.createElement('div');
+                    trashSvgDiv.classList.add('holder-trash-svg-div');
+                    holder.appendChild(trashSvgDiv);
+                    trashSvgDiv.addEventListener('click', function(e) {
+                        projectFactory.deleteProject(object);
+                        FadeOut.fadeOut(subtypeSidebarText); 
+                        CreateCategories.callCategoryCreation();
+                    });
+
+                        const trashSvg = document.createElement('object');
+                        trashSvg.setAttribute('type', 'image/svg+xml');
+                        trashSvg.classList.add('holder-trash-svg');
+                        trashSvg.data = trashSvgVar;       
+                        trashSvgDiv.appendChild(trashSvg);
+
+                    const offset = document.createElement('div');
+                    offset.classList.add('show-number');
+                    offset.textContent = object.offset;
+                    holder.appendChild(offset);
+
+
+            mouseAction.hover(subtypeSidebarText, project, offset);
+            CreatePanel.addListener(contentDiv, subtypeSidebarText, projectFactory.getAll(object.title), TaskGUI.task, 'tasks', object);
+
+        return subtypeSidebarText;
+    }
+
+    return {
+        parentProject,
+        project
+    }
+
+})();
+
+// creates clickable div with note h1 and counter for notes
+const CreateNotePanel = (function(){
+    const create = (contentDiv, parent) => {
+        const notesContainer = document.createElement('div');
+        notesContainer.classList.add('main-sidebar-text', 'sidebar-text-h1', 'notes-div');
+        notesContainer.textContent = 'Notes';
+        parent.appendChild(notesContainer);
+
+            const offsetNotes = document.createElement('div');
+            offsetNotes.setAttribute('id', 'show-number-project');
+            offsetNotes.textContent = noteFactory.listLength();
+            notesContainer.appendChild(offsetNotes);
+            
+            mouseAction.hover(notesContainer, notesContainer, offsetNotes);
+            notesContainer.addEventListener('click', function (e) {                      
+                CreatePanel.notePanel(contentDiv);
+            });
+
+        return notesContainer;
+    }
+
+    return { create }
     
 })();
 
-const FetchProjectPanel = (function() {
-    const displayProject = () => {
-        //code
+const CreateCategories = (function(){
+    var parentVar;
+    var wrapperVar;
+    var mainSidebarTextWrapperVar;
+
+    const callCategoryCreation = (parent, wrapper, mainSidebarTextWrapper) => {
+        if(parent != undefined) parentVar = parent;
+        if(mainSidebarTextWrapper != undefined) mainSidebarTextWrapperVar = mainSidebarTextWrapper;
+        if(wrapper != undefined) {
+            wrapperVar = wrapper;
+        } else wrapperVar.textContent = '';
+        const categoryArray = categoryFactory.getCategories();
+        categoryArray.forEach(category => {
+            let div = create(wrapperVar, category);
+            CreatePanel.addListener(parentVar, div, categoryFactory.getAll(category.title), TaskGUI.task, 'tasks', category);
+        });
+        CreateProjects.parentProject(parentVar, mainSidebarTextWrapperVar);
+        CreateNotePanel.create(parentVar, mainSidebarTextWrapperVar);
     };
 
-    return { displayProject };
-    
+    const create = (parentWrapper, object) => {
+        const category = document.createElement('div');
+        category.classList.add('main-sidebar-text', 'sidebar-text-h1', 'category');
+        category.textContent = object.title;
+        parentWrapper.appendChild(category);
+
+            const offset = document.createElement('div');
+            offset.classList.add('show-number');
+            offset.textContent = object.offset;
+            category.appendChild(offset);
+
+            mouseAction.hover(category, category, offset);
+
+        return category;
+    }
+
+    return {
+        callCategoryCreation,
+        create
+    }
 })();
 
-const CreateNotePanel = (function() {
-    const note = (target) => {
-        //code
-        return target;
-    };
-
-    return { note };
-    
-})();
-
-const FetchNotePanel = (function() {
-    const displayNote = () => {
-        //code
-    };
-
-    return { displayNote };
-    
-})();
 
 const CreateLandingPage = (function() {
     const page = () => {
@@ -644,26 +1020,29 @@ const CreateLandingPage = (function() {
         sideBar.classList.add('sidebar');
         wrapper.appendChild(sideBar);
 
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('content-div');
+        wrapper.appendChild(contentDiv);
+
             const mainSidebarTextWrapper = document.createElement('div');
             mainSidebarTextWrapper.classList.add('main-sidebar-text-wrapper');
             sideBar.appendChild(mainSidebarTextWrapper);
 
-                //this is where the rest of text goes
+                // creates all 5 categories with all the projects and the notes section
+                CreateCategories.callCategoryCreation(contentDiv, mainSidebarTextWrapper, mainSidebarTextWrapper);
+
+                // appends a default for when website loads
+                CreatePanel.generalPanel(contentDiv, categoryFactory.getAll('Home'), TaskGUI.task, 'tasks');
 
             const addBtn = document.createElement('div');
             addBtn.setAttribute('id', 'add-btn');
             addBtn.textContent = '+';
             sideBar.appendChild(addBtn);
-            addBtn.addEventListener('click', function (e) {
-                let popup = CreateNew.createNew();
-                popup.showModal();
-
+            addBtn.addEventListener('click', function () {
+                let modal = CreateNew.createNew();
+                modal.showModal();
             });
 
-        const contentDiv = document.createElement('div');
-        contentDiv.classList.add('content-div', 'content-div-flex');
-        contentDiv.setAttribute('id', 'main-content');
-        wrapper.appendChild(contentDiv);
     };
 
     return { page };

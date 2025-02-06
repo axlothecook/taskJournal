@@ -1,9 +1,3 @@
-//TODO: make category list get updated
-
-import { setDate } from 'date-fns';
-import '/src/css/style.css'; //should not be here
-// let wrapper = document.querySelector('#wrapper');
-
 // model for task, project and note class
 class NodeMaker {
     constructor(title) {
@@ -71,6 +65,8 @@ class Project extends NodeMaker{
         this.offset = 0;
         this.taskList = new TaskList();
     }
+
+    getOffset() { return this.offset; }
 
     getProperty(property) { return super.getProperty(property); }
 
@@ -174,7 +170,7 @@ class ListMaker {
         return arr;
     }
 
-    // delets passed item from parent list
+    // deletes passed item from parent list
     deleteThis(func, head, tail, value) {
         if (func === 0) return 0;
 
@@ -298,8 +294,6 @@ class ProjectList extends ListMaker {
     // deletes a project from the list
     deleteThis = (value) => { 
         super.deleteThis(this.length(), this.head, this.tail, value);
-
-        console.log('project deleted');
         
         if(this.head === value) {
             this.head = this.head.getNext();
@@ -393,9 +387,9 @@ class CategoryList extends ListMaker {
     }
 
     // edits passed item's specific information
-    editList = (task, command) => {        
+    editList = (task, command) => {           
         this.editOffset(this.head, task, command);
-        let juan = task.dueDate;
+        let juan = new Date(task.dueDate);
         let today = this.head.getNext().start;
         let tomorrow = timeFactory.tomorrow();
         if(juan.getFullYear() != timeFactory.year()) {
@@ -441,10 +435,10 @@ const projectFactory = (function(){
 
     // creates a task, adds it to its parent task list and increases offset of parent project & category
     const createTask = (project, title, details, dueDate, priority) => {
+        if (!project) return;
         var newTask = project.taskList.push(title, details, dueDate, priority);
         projectList.editOffset(project, 'increase');
         categoryFactory.addTask(newTask, 'increase');
-        // create in gui and display it
         return newTask;
     };
 
@@ -455,22 +449,37 @@ const projectFactory = (function(){
         // create in gui and display it
     };
 
+    const updateTask = (target, property, value) => {
+        const projectArray = projectList.getAllProjects();
+        projectArray.forEach(project => {
+            let taskArr = project.taskList.getAllTasks();
+            if (taskArr.length === undefined) return;
+            taskArr.forEach(task => {
+                if((task.title == target.title) && (task.dueDate == target.dueDate)) {
+                    project.taskList.edit(task, property, value);   
+                    return;                
+                }; 
+            });
+        });
+    }
+
     // finds the task in all task lists it resides in, deletes it and reduces offset of all parent projects
     const deleteTask = (task) => {
+        let returnVar;
         let projectsArray = projectList.getAllProjects();
         if (projectsArray.length === undefined) return;
         projectsArray.forEach(itemProject => {
             let tasksArray = itemProject.taskList.getAllTasks();
             if (tasksArray.length === undefined) return;
             tasksArray.forEach(item => {
-                if (item.title === task) {
+                if (item.title === task.title) {
+                    returnVar = itemProject;
                     itemProject.taskList.deleteThis(item);
                     projectList.editOffset(itemProject, 'reduce');
-                    categoryFactory.deleteOneTask(task);
-                    console.log('task in project found and deleted!');
                 };
             });
         });
+        if(returnVar != undefined) return returnVar;
     };
 
     const deleteProject = (project) => {
@@ -479,11 +488,37 @@ const projectFactory = (function(){
         if(projectArray.includes(project)) {
             categoryFactory.deleteAllTasks(project);
             projectList.deleteThis(project);
-            console.log('project found and deleted!');
         };
     };
 
-    //delete after finishing project
+    //returns list of all projects
+    const getProjects = () => { return projectList.getAllProjects(); };
+
+    //returns list of tasks for given project
+    const getAll = (string) => {
+        let projectArray = projectList.getAllProjects();
+        if (projectArray.length === undefined) return;
+        let tasksArray = [];
+        projectArray.forEach(project => {
+            if(project.title === string) {
+                tasksArray = project.taskList.getAllTasks();
+                if (tasksArray.length === undefined) return 0;
+            };
+        });
+        return tasksArray;
+    };
+
+    // number of items in that project
+    const getOffset = (searchWord) => {
+        let projectArray = projectList.getAllProjects();
+        if (projectArray.length === undefined) return 0;
+        const project = projectArray.find((project) => { 
+            if (project.title === searchWord) return project;
+        });
+        return project.getOffset();
+    };
+
+    // shows project linked list
     const displayProjectList = () => { 
         console.log('projectList:');
         console.log(projectList);
@@ -492,8 +527,12 @@ const projectFactory = (function(){
     return {
         createTask,
         createProject,
+        updateTask,
         deleteTask,
         deleteProject,
+        getProjects,
+        getAll,
+        getOffset,
         displayProjectList
     };
 
@@ -517,8 +556,6 @@ const categoryFactory = (function(){
             thisWeek,
             thisMonth
         };
-        
-        // create in gui and display it
     }
 
     const createTask = (title, details, dueDate, priority) => {
@@ -528,38 +565,62 @@ const categoryFactory = (function(){
     }
 
     const addTask = (task, command) => {
+        //logic to check if the task being added already exists
+        var checker = true;
+        const categoryArr = categoryList.getAllCategories();
+        categoryArr.forEach(category => {
+            let taskArr = category.taskList.getAllTasks();
+            if (taskArr != 0) {
+                taskArr.forEach(item => {
+                    if((item.title === task.title) && (item.details === task.details)) checker = false;
+                });
+            };
+        });
+        if(!checker) return;
         categoryList.editList(task, command);
     }
 
     const updateTask = (target, property, value) => {
+        let categoryToChangeArr = [];
+        let taskarr = [];
         const categoryArray = categoryList.getAllCategories();
         categoryArray.forEach(category => {
-            let categoryItemsArr = category.taskList.getAllTasks();
-            if (categoryItemsArr.length === undefined) return;
-            for(let i = 0; i < categoryItemsArr.length; i++) {
-                let counter = categoryItemsArr[i];
-                if((counter.title == target.title) && (counter.dueDate == target.dueDate)) {
-                    category.taskList.edit(counter, property, value);
+            let taskArr = category.taskList.getAllTasks();
+            if (taskArr.length === undefined) return;
+            taskArr.forEach(task => {
+                if((task.title == target.title) && (task.dueDate == target.dueDate)) {
+                    categoryToChangeArr.push(category);
+                    taskarr.push(task);                    
                 }; 
-            };
+            });
+        });
+
+        projectFactory.updateTask(target, property, value);
+        categoryToChangeArr.forEach(category => {
+            taskarr.forEach(item => {
+                category.taskList.edit(item, property, value);
+            });
         });
     };
 
     const deleteOneTask = (task) => {
+        let returnVar;
+        let catcher;
         let categoryArray = categoryList.getAllCategories();
         if (categoryArray.length === undefined) return;
-
         categoryArray.forEach(itemCategory => {
             let itemArray = itemCategory.taskList.getAllTasks();
             if (itemArray.length === undefined) return;
             itemArray.forEach(item => {
-                if (item.title === task) {
+                if (item.title === task.title) {
                     itemCategory.taskList.deleteThis(item);
                     categoryList.editOffset(itemCategory, task, 'reduce');
-                    console.log('task in category found and deleted!');
+                    returnVar = projectFactory.deleteTask(task);
+                    if (returnVar != undefined) catcher = returnVar;
                 };
             });
         });
+        if(catcher != undefined) return catcher;
     };
 
     const deleteAllTasks = (project) => {
@@ -581,21 +642,51 @@ const categoryFactory = (function(){
             });
 
         });
+
     };
 
-    //delete after finishing the project
-    const displayCategoryList = () => { 
-        console.log('categoryList:');
-        console.log(categoryList);
+    //receives name for the category we are feching tasks for
+    const getAll = (string) => {
+        let categoryArray = categoryList.getAllCategories();
+        let tasksArray = [];
+        categoryArray.forEach(category => {
+            if(category.title === string) {
+                tasksArray = category.taskList.getAllTasks();
+                if (tasksArray.length === undefined) return 0;
+            };
+        });
+        return tasksArray;
     };
+
+    // fetch just the time categories
+    const getCategories = () => { return categoryList.getAllCategories(); };
+
+    // number of items in that category
+    const getOffset = (searchWord) => {
+        let categoryArray = categoryList.getAllCategories();
+        if (categoryArray.length === undefined) return 0;
+        const category = categoryArray.find((category) => { 
+            if(category.title === searchWord) return category;
+        });
+        return category.getOffset();
+    };
+
+    // shows category linked list
+    const displayCategoryList = () => {
+        console.log('Category List:');
+        console.log(categoryList);
+    }
 
     return {
         createTask,
         createCategory,
         addTask,
+        getCategories,
         updateTask,
         deleteOneTask,
         deleteAllTasks,
+        getAll,
+        getOffset,
         displayCategoryList
     }
 
@@ -609,7 +700,6 @@ const noteFactory = (function(){
         let newNote = noteList.push(title, details);
         noteList.editOffset('increase');
         return newNote;
-        // create in gui and display it
     };
 
     const editNote = (target, property, value) => {
@@ -622,11 +712,14 @@ const noteFactory = (function(){
         if(noteArray.includes(note)) {
             noteList.deleteThis(note);
             noteList.editOffset('reduce');
-            console.log('note found and deleted!');
         };
     };
 
-    //delete after finishing project
+    const listLength = () => { return noteList.length(); };
+
+    const getAll = () => { return noteList.getAllNotes(); };
+
+    // shows note linked list
     const displayNotes = () => { 
         console.log('NoteList:');
         console.log(noteList);
@@ -637,6 +730,8 @@ const noteFactory = (function(){
         createNote,
         editNote,
         deleteNote,
+        listLength,
+        getAll,
         displayNotes
     };
 })();
@@ -700,69 +795,63 @@ const timeFactory = (function() {
 
 })();
 
-//delete after connecting js files
-let today = new Date();
-let outside = new Date('01-03-2023');
-let tmrw = new Date('01-16-2025');
-let eight = new Date('01-08-2025');
-let thisWeek = new Date('01-17-2025');
-let thisWeek2 = new Date('01-31-2025');
-let thisWeek3 = new Date('01-01-2025');
-let nextMonth = new Date('04-07-2025');
+//initiating the website with examples of tasks, projects and notes
+let today = '2025-02-06';
+let outside = '2023-03-01';
+let tmrw = '2025-02-06'; 
+let seven = '2025-02-09';
+let thisWeek = '2025-02-08';
+let thisWeek2 = '2025-02-01';
+let thisWeek3 = '2025-02-02';
+let nextMonth = '2025-04-07';
 
 categoryFactory.createCategory();
-let car1 = projectFactory.createProject('car1');
-let car2 = projectFactory.createProject('car2');
-let car3 = projectFactory.createProject('car3');
+let bills = projectFactory.createProject('Bills');
+let gym = projectFactory.createProject('Gym');
+let gaming = projectFactory.createProject('Gaming');
 
-projectFactory.createTask(car1, 'volvo', 'fast', today, 'low');
-projectFactory.createTask(car1, 'bmw', 'fast', outside, 'low');
-projectFactory.createTask(car1, 'aston martin', 'mid', thisWeek, 'mid');
-projectFactory.createTask(car1, 'volkswagen', 'mid', thisWeek3, 'high');
-projectFactory.createTask(car1, 'jaguar', 'mid', thisWeek2, 'high');
+projectFactory.createTask(bills, 'electricity', 'get money', today, 'high');
+projectFactory.createTask(bills, 'gas', 'not that expensive', outside, 'low');
+projectFactory.createTask(bills, 'running water', 'get money', thisWeek, 'mid');
+projectFactory.createTask(bills, 'wifi', 'ask for change in package', thisWeek3, 'high');
+projectFactory.createTask(bills, 'trash collection', 'throw the trash out too', thisWeek2, 'high');
 
-projectFactory.createTask(car2, 'toyota', 'slow', tmrw, 'mid');
-projectFactory.createTask(car2, 'hyundai', 'slow', eight, 'mid');
-projectFactory.createTask(car2, 'ford', 'mid', nextMonth, 'mid');
-projectFactory.createTask(car2, 'Cadillac ', 'mid', nextMonth, 'mid');
+projectFactory.createTask(gym, 'wash clothes', 'takes around 2h', tmrw, 'mid');
+projectFactory.createTask(gym, 'check money', 'make sure to have enough money for protein shakes', seven, 'mid');
+projectFactory.createTask(gym, 'upgrade membership', 'get the premium membership with tasty water', nextMonth, 'mid');
+projectFactory.createTask(gym, 'call johnny', 'ask johnny to join', nextMonth, 'mid');
 
-projectFactory.createTask(car3, 'bentley', 'fast', thisWeek, 'high');
-projectFactory.createTask(car3, 'Citroën', 'fast', thisWeek3, 'mid');
-projectFactory.createTask(car3, 'Chevrolet', 'slow', eight, 'low');
-
-car1.taskList.callToEdit(car1.taskList.head.getNext(), 'title', 'buggati');
-projectFactory.deleteTask('volvo'); 
-// projectFactory.deleteTask('buggati'); 
-// projectFactory.deleteTask('aston martin'); 
-// projectFactory.deleteTask('volkswagen'); 
-// projectFactory.deleteTask('jaguar'); 
-
-// home is 12
-// projectFactory.deleteProject(car1); // 7
-// projectFactory.deleteProject(car2); // 8
-// projectFactory.deleteProject(car3); // 9
+projectFactory.createTask(gaming, 'arknights', 'autorun the game', thisWeek, 'high');
+projectFactory.createTask(gaming, 'monster hunter', 'play with morgana', thisWeek3, 'mid');
+projectFactory.createTask(gaming, 'game awards 2025', 'watch the latest game awards on YT', seven, 'low');
 
 
-categoryFactory.createTask('bentley', 'fast', outside, 'high');
-categoryFactory.createTask('Citroën', 'fast', today, 'mid');
-categoryFactory.createTask('Chevrolet', 'slow', thisWeek2, 'low');
-
-
+categoryFactory.createTask('buy bread', 'bread.', outside, 'high');
+categoryFactory.createTask('call grandma', 'check up on granny', today, 'mid');
+categoryFactory.createTask('organize meetup', 'when and where is the trip?', thisWeek2, 'low');
 
 projectFactory.displayProjectList();
 categoryFactory.displayCategoryList();
 
 
-let noteBook = noteFactory.createNote('read book', 'found this cute book wanna read it');
-let noteBread = noteFactory.createNote('buy bread', 'gonna make cake');
-let noteBoy = noteFactory.createNote('find this boy', 'boyfriend sleeping somewhere, have to find him');
-let noteCar = noteFactory.createNote('car', 'stalk cars');
-
-noteFactory.editNote(noteBook, 'title', 'alfonso breado');
-// noteFactory.deleteNote(noteBook);
-// noteFactory.deleteNote(noteBread);
-// noteFactory.deleteNote(noteBoy);
-// noteFactory.deleteNote(noteCar);
+noteFactory.createNote('read book', 'found this cute book wanna read it');
+noteFactory.createNote('recipe', 'gonna make cake');
+noteFactory.createNote('???', 'cat sleeping somewhere, have to find him');
+noteFactory.createNote('language', 'learn japanese');
+noteFactory.createNote('water plants', 'get nutrients too');
+noteFactory.createNote('showcase', `showcases
+long
+note
+i dunno 
+water
+bridge 
+anime 
+mouse
+napkin
+food 
+banana`);
+noteFactory.createNote('anime', 'watch dandadan');
+noteFactory.createNote('rubics cube', 'get the last model of rubics cube from their website');
 
 noteFactory.displayNotes();
 
