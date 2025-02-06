@@ -810,6 +810,20 @@ let bills = projectFactory.createProject('Bills');
 let gym = projectFactory.createProject('Gym');
 let gaming = projectFactory.createProject('Gaming');
 
+// let projects = {
+//     arr: [bills.title, gym.title, gaming.title]
+// }
+
+// let buga = JSON.stringify('projects', projects);
+// localStorage.setItem('projects', buga);
+
+// let getsmt = localStorage.getItem('projects');
+// console.log(JSON.parse(getsmt));
+
+// let taskArr = {
+//     task: 
+// }
+
 projectFactory.createTask(bills, 'electricity', 'get money', today, 'high');
 projectFactory.createTask(bills, 'gas', 'not that expensive', outside, 'low');
 projectFactory.createTask(bills, 'running water', 'get money', thisWeek, 'mid');
