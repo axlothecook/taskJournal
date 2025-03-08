@@ -2,7 +2,7 @@
   "name": "taskjournal",
   "version": "1.0.0",
   "description": "",
-  "main": "gui.js",
+  "main": "index.js",
   "scripts": {
     "start": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",

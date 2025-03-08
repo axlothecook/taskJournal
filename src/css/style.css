@@ -1,4 +1,4 @@
-html, body, #wrapper{
+html, body {
     height: 100%;
     user-select: none;
 }
@@ -13,7 +13,6 @@ body{
     --side-bar: #eee;
     --btn-topbar: #607AB6;
 
-    /* background-color: blue; */
     color: black;
     box-sizing: border-box;
     display: flex; 
@@ -24,6 +23,10 @@ body{
 h1, h2, h3{
     margin-block-start: 0em;
     margin-block-end: 0em;
+}
+
+h2 {
+    width: 100%;
 }
 
 input, textarea{
@@ -46,136 +49,122 @@ textarea:focus{
     outline: none;
 }
 
-span{
-    font-size: 18px;
-}
-
 object{
     pointer-events: none;
     cursor: pointer;
 }
 
-#wrapper, #create-new-task-popup{
-    width: 100%;
-    display: grid;
-    grid-template-columns:1fr 4fr;
-    grid-template-rows: 1fr 10fr;
+span {
+    font-size: 18px;
 }
 
-#topbar{
-    grid-area: 1 / 1 / 1 / 3;
-    background-color: var(--btn-topbar);
 
-    display: flex;
-    align-items: flex-end;  
-    padding: 0 0 15px 45px;
-}
-
-.sidebar{
-    grid-area: 2 / 1 / 3 / 2;
-    background-color: var(--side-bar);
-    min-width: 15rem;
+#parent {
+    /* border: 1px solid yellow; */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 8rem;
-    padding: 2.7rem;
-    padding-top: 4rem;
-    border-right: 2px solid var(--btn-topbar);
+    flex-grow: 1;
 }
 
-.main-sidebar-text-wrapper{
+#topbar {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+    background-color: var(--btn-topbar);
+}
+
+#child{
+    display: flex;
+    /* border: 1px solid red; */
+    flex-grow: 1;
+}
+
+#side-bar{
+    background-color: var(--side-bar);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 2px solid grey;
+    padding: 30px;
+    min-width: 19rem;
+}
+
+.tasks-container {
+    padding: 30px;
+    /* border: 1px solid green; */
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 30px;
+}
+
+.flex-row {
+    display: flex;
+    flex-flow: row wrap;
+    flex-grow: 1;
+    gap: 30px;
+    align-content: flex-start;
+}
+
+#links-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.main-sidebar-text, .subtype-sidebar-text, #main-sidebar-text-no-hover{
+.links-div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#projects-div {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 2rem;
+}
+
+.projects-links {
+    padding-left: 30px;
+}
+
+.title-h1-size {
+    font-weight: 600;
+    font-size: 28px;
+}
+
+.project-title-h2-size {
+    font-weight: 400;
+}
+
+.project {
+    font-size: 14px;
+    font-weight: 300;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.main-sidebar-text, .subtype-sidebar-text {
-    cursor: pointer;
-}
-
-.main-sidebar-text:hover, .subtype-sidebar-text:hover {
-    transform: scale(1.05);
-}
-
-.holder-right-div {
-    display: flex;
-    gap: 1.2rem;
-}
-
-.holder-trash-svg-div {
+.right-side-project-title {
     display: flex;
     align-items: center;
-}
-
-.holder-trash-svg {
-    width: 1.3rem;
-    height: 1.3rem;
-}
-
-.sidebar-text-h1, #sidebar-text-h1-project{
-    font-size: 25px;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-.show-number, #show-number-project{
-    width: 25px;
-    height: 25px;
-    background-color: var(--btn-topbar);
-    font-size: 17px;
-    font-weight: bold;
-    border: none;
-    border-radius: 25px;
-    padding: 2px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-#projects-div{
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-#subtype-wrapper{
-    display: flex;
-    flex-direction: column;
-    padding-left: 20px;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.sidebar-text-h3{
-    font-size: 20px;
-    font-weight: normal;
+    gap: 30px;
 }
 
 #add-btn{
-    width: 3.5rem;
-    height: 3.1rem;
-    background-color: var(--btn-topbar);
+    width: 70px;
+    height: 70px;
+    font-size: 60px;
     border: none;
-    border-radius: 45px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 100;
-    font-size: 50px;
+    border-radius: 50%;
+    background-color: var(--btn-topbar);
     color: white;
-    padding-bottom: 7px;
-    cursor: pointer;
     box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
 
@@ -184,77 +173,75 @@ object{
     background-color: #4b5e8b;
 }
 
-.content-div{
-    grid-area: 2 / 2 / 3 / 3;
-    background-color: var(--main-content);
-    padding: 4rem;
-    overflow: scroll;
-}
-
-.content-div-flex{
-    display: flex;
-    flex-direction: column;
-    padding: 4rem 6rem;
-    gap: 1.3rem;
-}
-
-/* code for individual item in main content */
-.task-div{
-    background-color: var(--side-bar);
-    padding: 0.4rem 1rem;
+.task-div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: none;
+    padding: 5px 20px;
+    min-height: 35px;
+    background-color: var(--side-bar);
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-radius: 5px;
 }
 
-.task-div.border-green{
-    border-left: 3px solid green;
-}
-
-.task-div.border-orange{
-    border-left: 3px solid orange;
-}
-
-.task-div.border-red{
-    border-left: 3px solid red;
-}
-
-.left-side{
+.task-left-side {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    gap: 20px;
 }
 
-.checkbox-div{
+.task-right-side {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+}
+
+.checkbox {
+    background-color: transparent;
     width: 0.7rem;
     height: 0.7rem;
-    border: 2px solid 	#119999;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.checkbox-div.active{ 
+.active{ 
     background-image: url(/image/check.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-color: green;
 }
 
-.right-side{
-    width: 222px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    font-size: 13px;
+.low-div {
+    border-left-color: #119999;;
 }
 
-.date-display-div{
-    width: 5rem;
-    display: flex;
-    justify-content: center;
+.mid-div {
+    border-left-color: orange;
+}
+
+.high-div {
+    border-left-color: red;
+}
+
+
+.low-checkbox-border {
+    border: 2px solid #119999;
+}
+
+.mid-checkbox-border {
+    border: 2px solid orange;
+}
+
+.high-checkbox-border {
+    border: 2px solid red;
+}
+
+.title-holder {
+    font-size: 16px;
+    color: black;
 }
 
 .btn-div{
@@ -271,247 +258,86 @@ object{
     transition: all 0.3s;
 }
 
-.general-green-btn, .todo-date-class{
+.general-low-btn, .todo-date-class {
     color: #119999;
     background-color: rgba(#119999, 0.7);
     border: 1px solid #119999;
 }
 
-.general-green-btn:hover{
+.general-low-btn:hover{
     background-color: #119999;
 }
 
-/* rename example-note to note-div */
-.task-div:hover, .example-note:hover{
-    transition: all 0.3s; 
-    box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
-} 
-
-.svg-div{
-    width: 0.9rem;
-    height: 0.9rem;
-}
-
-.edit-svg-div:hover, .trash-svg-div:hover, .holder-trash-svg-div:hover{
-    cursor: pointer;
-    filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
-}
-
-
-/* popup to create a new task */
-#create-new-task-popup{
-    width: 60rem;
-    height: 30rem;
-    margin: 12% auto;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
-}
-
-.topbar-create-todo-popup{
-    grid-column: 1 / 3;
-    padding: 5px 20px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--btn-topbar);
-}
-
-.create-new-close{
-    width: 1.5rem;
-    height: 1.5rem;
-    filter: invert(100%) sepia(0%) saturate(1709%) hue-rotate(287deg) brightness(106%) contrast(106%);
-    cursor: pointer;
-}
-
-.create-new-close:hover{
-    cursor: pointer;
-    filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
-}
-
-.right-side-of-popup{
-    padding: 50px;
-    display: grid;
-    grid-template-columns: 6fr 1fr;
-    gap: 35px;
-}
-
-.sidebar-create-todo-popup{
-    max-width: 9rem;
-    min-width: 4rem;
-    justify-content: flex-start;
-    padding: 30px;
-    border-right: 1px solid grey;
-}
-
-.option-text, .note-title{
-    font-size: 25px;
-    font-weight: normal;
-    cursor: pointer;
-    transform: scale (1); 
-    color: black;
-    /* add with js on hover to the element, not class: var(--btn-topbar); */
-}
-
-.option-text.mouseOn{
-    font-weight: bold;
-    transform: scale (1.02); 
-    color: black;
-}
-
-.option-text:hover{
-    font-weight: bold;
-    transform: scale (1.02); 
-    color: black;
-}
-
-.input-wrapper-div{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.title-input{
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.details-input{
-    font-size: 17px;
-
-}
-
-#date-priority-wrapper-div, #date-priority-wrapper-div-child{
-    display: flex;
-    flex-direction: column;
-}
-
-#date-priority-wrapper-div{
-    justify-content: space-between;
-}
-
-.todo-date-class{
-    text-transform: uppercase;
-}
-
-.todo-date-class:hover, .todo-date-class:focus{
-    color: #119999;
-    outline: none;
-}
-
-#date-priority-wrapper-div-child{
-    height: 100%;
-    gap: 50px;
-}
-
-.priority-div, .add-todo-btn{
-    width: 4.5rem;
-}
-
-.low{
-    color: green;
-    /* background-color: (green, 0.7); */
-    border: 1px solid green;
-}
-
-.low.add-green{
-    background-color: green;
+.general-low-btn-selected {
     color: white;
+    transition: all 0.3s;
+    background-color: #119999;
 }
 
-.low:hover{
-    background-color: green;
-    color: white;
-}
-
-.mid{
+.general-mid-btn {
     color: orange;
-    /* background-color: (orange, 0.7); */
+    background-color: rgba(orange, 0.7);
     border: 1px solid orange;
 }
 
-.mid.add-orange{
+.general-mid-btn:hover{
     background-color: orange;
-    color: white;
 }
 
-
-.mid:hover{
-    background-color: orange;
+.general-medium-btn-selected {
     color: white;
+    transition: all 0.3s;
+    background-color: orange;
 }
 
-.high{
+.general-high-btn {
     color: red;
-    /* background-color: (red, 0.7); */
+    background-color: rgba(red, 0.7);
     border: 1px solid red;
 }
 
-.high.add-red{
+.general-high-btn:hover{
     background-color: red;
-    color: white;
 }
 
-.high:hover{
+.general-high-btn-selected {
+    color: white;
+    transition: all 0.3s;
     background-color: red;
-    color: white;
 }
 
-.shared-display-flex-gap-10px{
+.due-date-div {
+    font-size: 15px;
+    width: 5rem;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: center;
 }
 
-#priority-div-parent{
-    height: 100%;
-}
-
-#priority-divs-wrapper-parent{
-    height: 100%;
-    justify-content: space-between;
-}
-
-#priority-divs-wrapper-parent, #priority-divs-wrapper-child{
-    flex-wrap: wrap;
-    align-content: center;
-}
-
-/* code for create project & note popup */
-.right-side-submit-btn-div{
+.edit-svg, .trash-svg {
+    width: 18px;
+    height: 18px;
     display: flex;
-    flex-direction: column-reverse;
+    align-items: center;
 }
 
-.create-project-note-btn{
-    width: 7rem;
+.delete-svg {
+    height: 30px;
+    display: flex;
+    align-items: center;
 }
 
-/* for note */
-.content-div-grid{
-    /* padding: 0 10px; */
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: auto;
-    /* grid-template-columns: repeat(3, minmax(150px, 33.33%)); */
-    /* align-items: center; */
-    /* justify-items: flex-start; */
+.trash-svg-project {
+    height: inherit;
 }
 
-.grid-col{
-    /* width: 33.33%; */
-    padding: 0 10px;
+.edit-svg:hover, .trash-svg:hover, .trash-svg-project:hover{
+    cursor: pointer;
+    filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
 }
 
-.grid-col--1{
-    padding-left: 0px;
-}
-
-.grid-col--4{
-    padding-right: 0px;
-}
-
-.example-note{
+/* code for individual note gui */
+.note{
+    min-width: 18rem;
     position: relative;
     height: fit-content;
     background-color: var(--side-bar);
@@ -522,6 +348,11 @@ object{
     cursor: pointer;
 }
 
+.note:hover{
+    transition: all 0.3s; 
+    box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
+} 
+
 .note-title, .note-paragraph, .details-input{
     height: fit-content;
     width: 96%;
@@ -529,12 +360,17 @@ object{
     overflow: hidden;
 }
 
-.note-paragraph { 
-    font-size: 20px;
+.note-title{
+    font-size: 25px;
+    font-weight: normal;
+    cursor: pointer;
+    color: black;
+    min-height: 66px;
+    margin-bottom: 0.5rem;
 }
 
-.note-title{
-    margin-bottom: 1.2rem;
+.note-paragraph { 
+    font-size: 20px;
 }
 
 /* #create-note-close, #create-edit-close */
@@ -545,6 +381,7 @@ object{
     line-height: 1;
     width: 1rem;
     height: 1rem;
+    cursor: pointer;
 }
 
 .close-svg-div:hover{
@@ -555,10 +392,75 @@ object{
     filter: invert(0%) sepia(7%) saturate(7471%) hue-rotate(279deg) brightness(91%) contrast(109%);
     width: 1rem;
     height: 1rem;
+    cursor: pointer;
 }
 
+.close-x-svg:hover {
+    cursor: pointer;
+}
 
-/* edit popup  */
+/* details popup code */
+#details-popup{
+    position: relative;
+    width: 40rem;
+    margin: auto;
+    padding: 2rem;
+    background-color: #f7f7f7;
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 10px;
+}
+
+::backdrop{ 
+    background: rgb(0 0 0 / 30%);
+    backdrop-filter: blur(6px);
+}
+
+#details-popup-text-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+#details-popup-title{
+    font-size: 35px;
+}
+
+#details-popup-about-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.details-sub-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.details-project{ 
+    margin-right: 4.4rem;
+}
+
+.details-urgency{
+    margin-right: 4.4rem;
+}
+
+.details-deadline{
+    margin-right: 3.2rem;
+}
+
+.details-description{
+    margin-right: 2rem;
+}
+
+/* for edit popup */
+.right-side-of-popup{
+    padding: 50px;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    gap: 35px;
+}
+
 .edit-popup{
     position: relative;
     height: 21rem;
@@ -593,66 +495,178 @@ object{
     filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
 }
 
-
-
-/* details popup code */
-#details-popup{
-    position: relative;
-    width: 40rem;
-    margin: auto;
-    padding: 2rem;
-    background-color: #f7f7f7;
-    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.6);
-    border: none;
-    border-radius: 10px;
-    /* opacity: 0;  */  /* doesnt work */
+.title-input{
+    font-size: 20px;
+    font-weight: 500;
 }
 
-::backdrop{  /* animate so that blur comes in and off */
-    background: rgb(0 0 0 / 30%);
-    backdrop-filter: blur(6px);
+.details-input{
+    font-size: 17px;
 }
 
-#details-popup-text-wrapper{
+#date-priority-wrapper-div, #date-priority-wrapper-div-child{
     display: flex;
     flex-direction: column;
-    gap: 17px;
+    gap: 20px;
+    flex: 1;
 }
 
-#details-popup-title{
-    font-size: 35px;
+#date-priority-wrapper-div{
+    justify-content: space-between;
 }
 
-#details-popup-about-wrapper{
+.shared-display-flex-gap-10px{
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-#details-popup-category{ 
-    margin-right: 4.2rem;
-}
-
-#details-popup-urgency{
-    margin-right: 4.1rem;
-}
-
-#details-popup-deadline{
-    margin-right: 3rem;
-}
-
-#details-popup-more{
-    margin-right: 1.9rem;
-}
-
-.empty-msg-container {
-    margin-top: 13%;
+#priority-div-parent{
     display: flex;
-    flex-flow: column wrap;
+    flex: 1;
+}
+
+#priority-divs-wrapper-parent{
+    flex: 1;
+    justify-content: space-between;
+}
+
+#priority-divs-wrapper-parent, #priority-divs-wrapper-child{
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+ #priority-divs-wrapper-child{
+    flex-wrap: wrap;
+    align-content: center;
+    
+}
+
+.priority-div, .add-todo-btn{
+    width: 4.5rem;
+}
+
+.confirm-changes-btn{
+    width: 8rem;
+}
+
+/* create a new popup */
+#create-new-task-popup{
+    max-width: 65rem;
+    display: grid;
+    grid-template-columns:1fr 4fr;
+    grid-template-rows: 1fr 10fr;
+    border: none;
+    border-radius: 10px;
+    margin: 10rem auto;
+}
+
+.create-new-topbar{
+    grid-area: 1 / 1 / 1 / 3;
+    background-color: var(--btn-topbar);
+
+    display: flex;
+    padding: 5px 20px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--btn-topbar);
+}
+
+.create-new-sidebar{
+    grid-area: 2 / 1 / 3 / 2;
+    background-color: var(--side-bar);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8rem;
+    max-width: 9rem;
+    min-width: 4rem;
+    padding: 30px;
+    border-right: 1px solid grey;
+}
+
+.main-sidebar-text-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.option-text{
+    font-size: 25px;
+    font-weight: normal;
+    cursor: pointer;
+    transform: scale (1); 
+    color: black;
+}
+
+.option-text.mouseOn{
+    font-weight: bold;
+    transform: scale (1.02); 
+    color: black;
+}
+
+.option-text:hover{
+    font-weight: bold;
+    transform: scale (1.02); 
+    color: black;
+}
+
+/* for todo side of 'create new' popup */
+.input-wrapper-div{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* for project side of 'create new' popup */
+.right-side-submit-btn-div{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.create-project-note-btn{
+    width: 7rem;
+}
+
+/* for note side of 'create new' popup */
+.create-project-note-btn{
+    width: 7rem;
+}
+
+
+.right-side-of-popup{
+    padding: 50px;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    gap: 35px;
+}
+
+/* for offset */
+.show-number, #show-number-project{
+    width: 25px;
+    height: 25px;
+    background-color: var(--btn-topbar);
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    padding: 2px;
+
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    flex-shrink: 0;
 }
+
+.category {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+/* for hover over main titles */
 
 .blue-clr1 {
     color: #607AB6;
@@ -661,3 +675,4 @@ object{
 .white-clr1 {
     color: white;
 }
+

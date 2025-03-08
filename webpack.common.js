@@ -3,7 +3,7 @@
 
  module.exports = {
    entry: {
-     app: './src/js/gui.js',
+     app: './src/js/index.js',
    },
    plugins: [
      new HtmlWebpackPlugin({
@@ -17,7 +17,7 @@
    },
    plugins: [
     new HtmlWebpackPlugin({
-      template: "./index.html",
+      template: "./src/index.html",
     }),
   ],
   stats: {
