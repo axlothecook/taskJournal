@@ -1,6 +1,8 @@
 html, body {
-    height: 100%;
     user-select: none;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 *, *::before, *::after{
@@ -43,6 +45,7 @@ textarea{
     border: none;
     font-family: inherit;
     resize: none;
+    field-sizing: content;
 }
 
 textarea:focus{
@@ -60,7 +63,6 @@ span {
 
 
 #parent {
-    /* border: 1px solid yellow; */
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -77,11 +79,10 @@ span {
 
 #child{
     display: flex;
-    /* border: 1px solid red; */
     flex-grow: 1;
 }
 
-#side-bar{
+.side-bar{
     background-color: var(--side-bar);
     display: flex;
     flex-direction: column;
@@ -93,10 +94,10 @@ span {
 
 .tasks-container {
     padding: 30px;
-    /* border: 1px solid green; */
 }
 
 .flex-column {
+    width: 90%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -157,7 +158,7 @@ span {
     gap: 30px;
 }
 
-#add-btn{
+.add-btn{
     width: 70px;
     height: 70px;
     font-size: 60px;
@@ -168,7 +169,7 @@ span {
     box-shadow: 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
 
-#add-btn:hover{
+.add-btn:hover{
     transform: scale(1.1);
     background-color: #4b5e8b;
 }
@@ -313,6 +314,13 @@ span {
     justify-content: center;
 }
 
+.edit-delete-svg-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
 .edit-svg, .trash-svg {
     width: 18px;
     height: 18px;
@@ -335,7 +343,7 @@ span {
     filter: invert(24%) sepia(100%) saturate(1934%) hue-rotate(97deg) brightness(94%) contrast(103%);
 }
 
-/* code for individual note gui */
+/* individual note gui */
 .note{
     min-width: 18rem;
     position: relative;
@@ -354,10 +362,17 @@ span {
 } 
 
 .note-title, .note-paragraph, .details-input{
-    height: fit-content;
-    width: 96%;
     display: block;
     overflow: hidden;
+}
+
+.note-title, .note-paragraph{
+    height: fit-content;
+}
+
+.details-input {
+    max-height: 17rem;
+    font-size: 17px;
 }
 
 .note-title{
@@ -373,7 +388,6 @@ span {
     font-size: 20px;
 }
 
-/* #create-note-close, #create-edit-close */
 .close-svg-div{
     position: absolute;
     top: 10px;
@@ -401,7 +415,6 @@ span {
 
 /* details popup code */
 #details-popup{
-    position: relative;
     width: 40rem;
     margin: auto;
     padding: 2rem;
@@ -463,6 +476,7 @@ span {
 
 .edit-popup{
     position: relative;
+    height: fit-content;
     height: 21rem;
     width: 50rem;
     margin: auto;
@@ -498,20 +512,17 @@ span {
 .title-input{
     font-size: 20px;
     font-weight: 500;
+    height: 35px;
 }
 
-.details-input{
-    font-size: 17px;
-}
-
-#date-priority-wrapper-div, #date-priority-wrapper-div-child{
+.date-priority-wrapper-div, .date-priority-wrapper-div-child{
     display: flex;
     flex-direction: column;
     gap: 20px;
     flex: 1;
 }
 
-#date-priority-wrapper-div{
+.date-priority-wrapper-div{
     justify-content: space-between;
 }
 
@@ -521,25 +532,19 @@ span {
     gap: 10px;
 }
 
-#priority-div-parent{
+.priority-div-parent{
     display: flex;
     flex: 1;
 }
 
-#priority-divs-wrapper-parent{
+.priority-divs-wrapper-parent{
     flex: 1;
     justify-content: space-between;
 }
 
-#priority-divs-wrapper-parent, #priority-divs-wrapper-child{
+.priority-divs-wrapper-parent, .priority-divs-wrapper-child{
     flex-wrap: wrap;
     align-content: center;
-}
-
- #priority-divs-wrapper-child{
-    flex-wrap: wrap;
-    align-content: center;
-    
 }
 
 .priority-div, .add-todo-btn{
@@ -558,7 +563,7 @@ span {
     grid-template-rows: 1fr 10fr;
     border: none;
     border-radius: 10px;
-    margin: 10rem auto;
+    margin: auto;
 }
 
 .create-new-topbar{
@@ -575,12 +580,7 @@ span {
 .create-new-sidebar{
     grid-area: 2 / 1 / 3 / 2;
     background-color: var(--side-bar);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 8rem;
     max-width: 9rem;
-    min-width: 4rem;
     padding: 30px;
     border-right: 1px solid grey;
 }
@@ -597,6 +597,7 @@ span {
     cursor: pointer;
     transform: scale (1); 
     color: black;
+    flex-shrink: 0;
 }
 
 .option-text.mouseOn{
@@ -616,6 +617,9 @@ span {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 15px;
 }
 
 /* for project side of 'create new' popup */
@@ -631,14 +635,6 @@ span {
 /* for note side of 'create new' popup */
 .create-project-note-btn{
     width: 7rem;
-}
-
-
-.right-side-of-popup{
-    padding: 50px;
-    display: grid;
-    grid-template-columns: 6fr 1fr;
-    gap: 35px;
 }
 
 /* for offset */
@@ -667,7 +663,6 @@ span {
 }
 
 /* for hover over main titles */
-
 .blue-clr1 {
     color: #607AB6;
 }
@@ -676,3 +671,463 @@ span {
     color: white;
 }
 
+.bottom-bar {
+    width: 100%;
+    background-color: var(--side-bar);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0px;
+    position: fixed;
+    right: -100%;
+}
+
+.open-sidebar-div {
+    position: absolute;
+    right: 35px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+}
+
+.open-sidebar-svg {
+    height: inherit;
+    filter: invert(0%) sepia(7%) saturate(7471%) hue-rotate(279deg) brightness(91%) contrast(109%);
+}
+
+@media screen and (max-width: 1200px) {
+
+    #create-new-task-popup {
+        margin: auto 4rem;
+        width: inherit;
+        min-height: 30rem;
+    }
+
+    .bottom-bar {
+        position: relative;
+        right: 0;
+        bottom: 0;
+    }
+
+    #child {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .side-bar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -130%;
+        transition: left 1.2s;
+        z-index: 1;
+        overflow-y: scroll;
+    }
+
+    .side-bar.show-sidebar{
+        left: 0;
+    }
+
+    .add-btn-main {
+        visibility: hidden;
+    }
+
+}
+
+@media screen and (max-width: 992px) {
+
+    .right-side-of-popup{
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .edit-popup {
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+        gap: 35px;
+        width: 40rem;
+    }
+
+    .todo-date-class {
+        max-width: 10rem;
+    }
+
+    .date-div-992-px-mq {
+        display: flex;
+        flex-direction: row;
+        gap: 11px;
+    }
+
+    .date-priority-wrapper-div-create {
+        flex: 0;
+    }
+
+    .date-priority-wrapper-div-child-create {
+        flex: 0;
+    }
+
+    .priority-div-parent-create {
+        display: flex;
+        flex: 0;
+        flex-direction: row;
+        gap: 27px;
+    }
+
+    .priority-divs-wrapper-parent-create {
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        align-content: flex-start;
+        justify-content: space-between;
+    }
+
+    .priority-divs-wrapper-child-create {
+        flex-direction: row;
+    }
+
+    .add-todo-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .details-input {
+        min-height: 15rem;
+    }
+
+}
+
+@media screen and (max-width: 884px) {
+    #create-new-task-popup {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .create-new-sidebar{
+        max-width: none;
+        background-color: transparent;
+        padding: 20px 50px;
+    }
+
+    .main-sidebar-text-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .option-text {
+        background-color: rgb(77, 77, 77);
+        padding: 2px 20px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .right-side-of-popup{
+        padding-top: 10px;
+    }
+}
+
+@media screen and (max-width: 845px) {
+
+    #details-popup {
+        width: 30rem;
+        align-self: center;
+    }
+
+    .edit-popup {
+        padding-top: 50px;
+        width: 35rem;
+    }
+
+    .bottom-bar {
+        justify-content: flex-end;
+        padding-right: 90px;
+        gap: 40px;
+    }
+
+    .open-sidebar-div {
+        position: relative;
+        right: 0;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    #details-popup {
+        width: 25rem;
+    }
+
+    .edit-popup {
+        width: 30rem;
+    }
+}
+
+@media screen and (max-width: 711px) {
+
+    .priority-divs-wrapper-child-create {
+        flex-direction: column;
+    }
+
+    .details-input {
+        min-height: 6rem;
+    }
+
+    .edit-popup {
+        width: 25rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .task-div {
+        width: 212px;
+        flex-direction: column;
+        gap: 20px;
+        padding: 5px 10px;
+    }
+
+    .task-left-side, .task-right-side {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .task-left-side {
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .title-holder {
+        font-weight: bold;
+    }
+
+    .due-date-div {
+        margin-left: 2rem;
+        font-style: italic;
+    }
+
+    .task-right-side {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .edit-delete-svg-div {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #links-container {
+        width: fit-content;
+    }
+
+    .links-div, #projects-div {
+        width: 100%;
+    }
+
+    .category {
+        justify-content: flex-start;
+        gap: 15px;
+    }
+
+    .side-bar {
+        min-width: 11rem;
+    }
+
+    .category:first-of-type {
+        gap: 112px;
+    }
+
+    .Today {
+        gap: 114px;
+    }
+
+    .Tomorrow {
+        gap: 61px;
+    }
+
+    .ThisWeek {
+        gap: 60px;
+    }
+
+    .ThisMonth {
+        gap: 45px;
+    }
+
+    .projects-links {
+        padding-left: 0;
+    }
+
+    h2 {
+        width: fit-content;
+    }
+    
+}
+
+@media screen and (max-width: 585px) {
+
+    #details-popup {
+        width: 20rem;
+    }
+
+    .create-new-sidebar {
+        padding: 30px;
+    }
+
+    .main-sidebar-text-wrapper {
+        flex-direction: column;
+    }
+
+    .option-text {
+        text-align: center;
+    }
+
+    .right-side-of-popup {
+        padding: 0px 30px 30px;
+    }
+
+    .priority-divs-wrapper-parent-create {
+        flex-direction: column;
+    }
+
+    .add-todo-btn {
+        margin-top: 2rem;
+        position: relative;
+        bottom: 0;
+        right: 0;
+    }
+
+    .date-div-992-px-mq {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .priority-div-parent-create {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .details-input {
+        min-height: auto;
+    }
+
+    .edit-popup {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        padding: 50px;
+        width: 17rem;
+    }
+
+    .share-display-10-px-edit {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .confirm-changes-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .flex-row{
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #details-popup {
+        width: 17rem;
+    }
+
+    .details-sub-title {
+        margin-right: 1rem;
+    }
+
+    .details-sub-title > span {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .edit-popup {
+        width: 13rem;
+        min-height: 380px;
+    }
+
+    .share-display-10-px-edit {
+        flex-direction: column;
+    }
+
+    .confirm-changes-btn {
+        position: relative;
+        bottom: 0;
+        right: 0;
+    }
+
+    .side-bar {
+        padding: 25px;
+        min-width: 10rem;
+    }
+
+    .project {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .add-btn {
+        visibility: hidden;
+    }
+
+    .add-btn-main {
+        visibility: visible;
+    }
+
+    .open-sidebar-div {
+        right: -20px;
+    }
+
+    .category:first-of-type {
+        gap: 62px;
+    }
+
+    .Today {
+        gap: 64px;
+    }
+
+    .Tomorrow {
+        gap: 10px;
+    }
+
+    .ThisWeek {
+        gap: 70px;
+    }
+
+    .ThisMonth {
+        gap: 55px;
+    }
+
+}
+
+@media screen and (max-width: 430px) {
+    #details-popup-about-wrapper > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    #details-popup {
+        width: 10rem;
+    }
+}
+
+@media screen and (max-width: 411px) {
+    .edit-popup {
+        width: 9rem;
+    }
+}

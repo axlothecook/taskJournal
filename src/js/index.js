@@ -9,8 +9,7 @@ import {
 import closeSvgVar from '/image/x-svg.svg';
 import trashSvgVar from '/image/trash-can-regular.svg';
 import editSvgVar from '/image/pen-to-square-regular.svg';
-
-// localStorage.clear();
+import openSidebarSvgReal from '/image/bars-solid.svg';
 
 class Task {
     constructor(title, project, details, dueDate, urgency, done = false) {
@@ -46,8 +45,6 @@ class Note {
 }
 
 const StorageManager = (function(){
-    // let latch = false;
-
     const FirstBootDone = () => { localStorage.setItem('latch', JSON.stringify(true)); };
 
     const isFirstBoot = () => { return !JSON.parse(localStorage.getItem('latch')); };
@@ -55,7 +52,6 @@ const StorageManager = (function(){
     const loadTasks = () => {
         var taskArr = JSON.parse(localStorage.getItem('tasks'));
         return taskArr ? taskArr : [];
-
     }
 
     const loadProjects = () => {
@@ -348,6 +344,20 @@ const GUIManager = (function(){
         });
     };
 
+    const bodyScrollControls = {
+        scrollBarWidth: window.innerWidth - document.body.clientWidth,
+    
+        disable() {
+            document.body.style.marginRight = `${this.scrollBarWidth}px`;
+            document.body.style.overflowY = 'hidden';
+        },
+
+        enable() {
+            document.body.style.marginRight = null;
+            document.body.style.overflowY = null;
+        },
+    };
+
     const toggle = (status, checkboxDiv, taskDiv, taskTextDiv) => {
         if (!status) {
             checkboxDiv.classList.remove('active');
@@ -400,12 +410,23 @@ const GUIManager = (function(){
 
                 const dueDateDiv = document.createElement('div');
                 dueDateDiv.classList.add('due-date-div');
-                dueDateDiv.textContent = `${format(new Date(task.dueDate), 'MMM')} ${format(new Date(task.dueDate), 'do')}`; 
-                taskRightSide.appendChild(dueDateDiv);
+                dueDateDiv.textContent = `${format(new Date(task.dueDate), 'MMM')} ${format(new Date(task.dueDate), 'do')}`;
+                (window.innerWidth > 600) ? taskRightSide.appendChild(dueDateDiv) : taskLeftSide.appendChild(dueDateDiv); 
+                // window.addEventListener('resize', () => {
+                //     if (window.innerWidth > 600) {
+                //         taskRightSide.appendChild(dueDateDiv);
+                //         taskRightSide.appendChild(svgDiv);
+                //     } else taskLeftSide.appendChild(dueDateDiv);
+                // });
+
+                const svgDiv = document.createElement('div');
+                svgDiv.classList.add('edit-delete-svg-div');
+                taskRightSide.appendChild(svgDiv);
 
                 const editDiv = document.createElement('div');
                 editDiv.classList.add('edit-svg');
-                taskRightSide.appendChild(editDiv);
+                svgDiv.appendChild(editDiv);
+
                 editDiv.addEventListener('click', () => {
                     createEditDiv(task).showModal();
                 })
@@ -418,7 +439,8 @@ const GUIManager = (function(){
 
                 const deleteDiv = document.createElement('div');
                 deleteDiv.classList.add('delete-svg');
-                taskRightSide.appendChild(deleteDiv);
+                svgDiv.appendChild(deleteDiv);
+
                 deleteDiv.addEventListener('click', () => {
                     TaskManager.deleteTask(task.title);
                     calculateOffsets();
@@ -430,6 +452,7 @@ const GUIManager = (function(){
                     trashSvg.classList.add('trash-svg');
                     trashSvg.data = trashSvgVar;         
                     deleteDiv.appendChild(trashSvg);
+
     }
 
     const addProjectToOffestContainer = (offset, title) => {
@@ -575,8 +598,10 @@ const GUIManager = (function(){
         while(tasksContainer.firstChild) {
             tasksContainer.removeChild(tasksContainer.lastChild);
         };
-        if(tasksContainer.classList.contains('flex-row')) tasksContainer.classList.remove('flex-row');
-        tasksContainer.classList.add('flex-column');
+        if(window.innerWidth > 600) {
+            if(tasksContainer.classList.contains('flex-row')) tasksContainer.classList.remove('flex-row');
+            tasksContainer.classList.add('flex-column');
+        } else tasksContainer.classList.add('flex-row');
         taskarr.forEach(task => {
             createTaskElement(task);
         })
@@ -717,15 +742,15 @@ const GUIManager = (function(){
             });
 
         const datePriorityWrapper = document.createElement('div');
-        datePriorityWrapper.setAttribute('id', 'date-priority-wrapper-div');
+        datePriorityWrapper.classList.add('date-priority-wrapper-div', 'date-priority-wrapper-div-edit');
         editPopUp.appendChild(datePriorityWrapper);
 
             const datePriorityWrapperChild = document.createElement('div');
-            datePriorityWrapperChild.setAttribute('id', 'date-priority-wrapper-div-child');
+            datePriorityWrapperChild.classList.add('date-priority-wrapper-div-child', 'date-priority-wrapper-div-child-edit');
             datePriorityWrapper.appendChild(datePriorityWrapperChild);
 
                 const sharedDisplay1 = document.createElement('div');
-                sharedDisplay1.classList.add('shared-display-flex-gap-10px');
+                sharedDisplay1.classList.add('shared-display-flex-gap-10px', 'share-display-10-px-edit');
                 datePriorityWrapperChild.appendChild(sharedDisplay1);
 
                     const h3DueDate = document.createElement('h3');
@@ -743,7 +768,7 @@ const GUIManager = (function(){
 
                 const sharedDisplay2Parent = document.createElement('div');
                 sharedDisplay2Parent.classList.add('shared-display-flex-gap-10px');
-                sharedDisplay2Parent.setAttribute('id', 'priority-div-parent');
+                sharedDisplay2Parent.classList.add('priority-div-parent', 'priority-div-parent-edit');
                 datePriorityWrapperChild.appendChild(sharedDisplay2Parent);
 
                     const h3Priority = document.createElement('h3');
@@ -752,12 +777,12 @@ const GUIManager = (function(){
 
                     const sharedDisplay2ChildParent =  document.createElement('div');
                     sharedDisplay2ChildParent.classList.add('shared-display-flex-gap-10px');
-                    sharedDisplay2ChildParent.setAttribute('id', 'priority-divs-wrapper-parent');
+                    sharedDisplay2ChildParent.classList.add('priority-divs-wrapper-parent', 'priority-divs-wrapper-parent-edit');
                     sharedDisplay2Parent.appendChild(sharedDisplay2ChildParent);
 
                         const sharedDisplay2ChildChild = document.createElement('div');
                         sharedDisplay2ChildChild.classList.add('shared-display-flex-gap-10px');
-                        sharedDisplay2ChildChild.setAttribute('id', 'priority-divs-wrapper-child');
+                        sharedDisplay2ChildChild.classList.add('priority-divs-wrapper-child', 'priority-divs-wrapper-child-edit');
                         sharedDisplay2ChildParent.appendChild(sharedDisplay2ChildChild);
 
                             let lowPriorityDiv = document.createElement('div');
@@ -867,15 +892,15 @@ const GUIManager = (function(){
             inputWrapperDiv.appendChild(detailsInput);
 
         const datePriorityWrapperParent = document.createElement('div');
-        datePriorityWrapperParent.setAttribute('id', 'date-priority-wrapper-div');
+        datePriorityWrapperParent.classList.add('date-priority-wrapper-div', 'date-priority-wrapper-div-create');
         popup.appendChild(datePriorityWrapperParent);
 
             const datePriorityWrapperChild = document.createElement('div');
-            datePriorityWrapperChild.setAttribute('id', 'date-priority-wrapper-div-child');
+            datePriorityWrapperChild.classList.add('date-priority-wrapper-div-child', 'date-priority-wrapper-div-child-create');
             datePriorityWrapperParent.appendChild(datePriorityWrapperChild);
 
                 const sharedDisplayFlex1 = document.createElement('div');
-                sharedDisplayFlex1.classList.add('shared-display-flex-gap-10px');
+                sharedDisplayFlex1.classList.add('shared-display-flex-gap-10px', 'date-div-992-px-mq');
                 datePriorityWrapperChild.appendChild(sharedDisplayFlex1);
 
                     const h3DueDate = document.createElement('h3');
@@ -889,7 +914,7 @@ const GUIManager = (function(){
 
                 const sharedDisplayFlex2Grandparent = document.createElement('div');
                 sharedDisplayFlex2Grandparent.classList.add('shared-display-flex-gap-10px');
-                sharedDisplayFlex2Grandparent.setAttribute('id', 'priority-div-parent');
+                sharedDisplayFlex2Grandparent.classList.add('priority-div-parent', 'priority-div-parent-create');
                 datePriorityWrapperChild.appendChild(sharedDisplayFlex2Grandparent);
 
                     const h3Priority = document.createElement('h3');
@@ -898,12 +923,12 @@ const GUIManager = (function(){
 
                     const sharedDisplayFlex3Parent = document.createElement('div');
                     sharedDisplayFlex3Parent.classList.add('shared-display-flex-gap-10px');
-                    sharedDisplayFlex3Parent.setAttribute('id', 'priority-divs-wrapper-parent');
+                    sharedDisplayFlex3Parent.classList.add('priority-divs-wrapper-parent', 'priority-divs-wrapper-parent-create');
                     sharedDisplayFlex2Grandparent.appendChild(sharedDisplayFlex3Parent);
 
                         const sharedDisplayFlex4Grandchild = document.createElement('div');
                         sharedDisplayFlex4Grandchild.classList.add('shared-display-flex-gap-10px');
-                        sharedDisplayFlex4Grandchild.setAttribute('id', 'priority-divs-wrapper-child');
+                        sharedDisplayFlex4Grandchild.classList.add('priority-divs-wrapper-child', 'priority-divs-wrapper-child-create');
                         sharedDisplayFlex3Parent.appendChild(sharedDisplayFlex4Grandchild);
 
                             const lowPriorityDiv = document.createElement('div');
@@ -1071,6 +1096,7 @@ const GUIManager = (function(){
                 mainSidebarTextWrapper.classList.add('main-sidebar-text-wrapper');
                 sidebarCreateTodo.appendChild(mainSidebarTextWrapper);
 
+                // create a new task option
                     const createTodoOption = document.createElement('div');
                     createTodoOption.classList.add('option-text');
                     createTodoOption.textContent = 'To Do';
@@ -1092,7 +1118,8 @@ const GUIManager = (function(){
                     onOptionTextHover(createNoteOption, 'mouseOn');
 
             let div = side(createNewDiv); 
-            createTaskSide(div, createNewDiv); //default
+            // default create task ui on the right side when popup opens
+            createTaskSide(div, createNewDiv); 
             createTodoOption.classList.add('mouseOn');
 
             createTodoOption.addEventListener('click', function () {
@@ -1128,12 +1155,14 @@ const GUIManager = (function(){
 
         categoryArr.forEach(object => {
             const category = document.createElement('div');
-            category.classList.add('category');
+            category.classList.add('category', `${object.title.replace(/\s+/g, '')}`);
             categoryLinks.appendChild(category);
 
                 const categoryTitle = document.createElement('h1');
                 categoryTitle.classList.add('title-h1-size');
                 categoryTitle.textContent = object.title;
+                if((window.innerWidth <= 480) && (/\s/g.test(object.title))) categoryTitle.textContent = object.title.split(" ")[1];
+
                 category.appendChild(categoryTitle);
 
                 const offset = document.createElement('div');
@@ -1183,10 +1212,10 @@ const GUIManager = (function(){
 
                     const title = document.createElement('h1');
                     title.textContent = 'taskJournal';
-                    titleDiv.appendChild(title);
+                    titleDiv.appendChild(title);          
 
                 const sidebar = document.createElement('div');
-                sidebar.setAttribute('id', 'side-bar');
+                sidebar.classList.add('side-bar');
                 child.appendChild(sidebar);
 
                 tasksContainer = document.createElement('div');
@@ -1219,13 +1248,45 @@ const GUIManager = (function(){
                         linksContainer.appendChild(notesContainer);
 
                     const addBtn = document.createElement('button');
-                    addBtn.setAttribute('id', 'add-btn');
+                    addBtn.classList.add('add-btn', 'add-btn-main');
                     addBtn.textContent = '+';
                     sidebar.appendChild(addBtn);
                     addBtn.addEventListener('click', () => {
                         let modal = createNewDiv();
                         modal.showModal();
                     });
+
+                    const bottomDiv = document.createElement('div');
+                    bottomDiv.classList.add('bottom-bar');
+                    child.appendChild(bottomDiv);
+
+                    const addBtn2 = document.createElement('button');
+                    addBtn2.classList.add('add-btn');
+                    addBtn2.textContent = '+';
+                    bottomDiv.appendChild(addBtn2);
+                    addBtn2.addEventListener('click', () => {
+                        let modal = createNewDiv();
+                        modal.showModal();
+                    });
+
+                        const openSidebarDiv = document.createElement('div');
+                        openSidebarDiv.classList.add('open-sidebar-div');
+                        bottomDiv.appendChild(openSidebarDiv); 
+                        openSidebarDiv.addEventListener('click', () => {
+                            if (sidebar.classList.contains('show-sidebar')) {
+                                sidebar.classList.remove('show-sidebar');
+                                bodyScrollControls.disable();
+                            } else {
+                                sidebar.classList.add('show-sidebar');
+                                bodyScrollControls.enable();
+                            }
+                        });
+
+                            const openSidebarSvg = document.createElement('object');
+                            openSidebarSvg.setAttribute('type', 'image/svg+xml');
+                            openSidebarSvg.classList.add('open-sidebar-svg');
+                            openSidebarSvg.data = openSidebarSvgReal;    
+                            openSidebarDiv.appendChild(openSidebarSvg);   
 
         loadTaskPage(TaskManager.getAllTasks());
         createFilters();
