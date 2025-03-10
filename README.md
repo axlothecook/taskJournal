@@ -41,6 +41,15 @@ Demo: <br />
 // general look of the website on 1200px+ screen, iPad and smartphone
 ![image](https://github.com/user-attachments/assets/666d943b-df05-40f4-ab2a-9a377ee0e4ee)
 
-// UI for new task creation
+// creating a new task
 ![image](https://github.com/user-attachments/assets/dfff1d97-8c0b-48e3-b0d1-93b6961efecf)
+
+// editing a task 
+![image](https://github.com/user-attachments/assets/a66f17c1-13e8-44b5-964b-e50dec221cf6)
+
+// details of a task
+![image](https://github.com/user-attachments/assets/1d24089e-bc56-44a1-9f91-a3e278e3e08e)
+
+// notes section
+![image](https://github.com/user-attachments/assets/219d5bba-1ecc-444c-a9de-e7babf31e2e8)
 
