@@ -1,7 +1,7 @@
 Title: taskJournal
 
-What is it? 
-/ taskJournal is an online task manager for the busybodies. This includes creation, information view, edition and deletion of day-to-day tasks, projects and notes. 
+What is it? \n
+taskJournal is an online task manager for the busybodies. This includes creation, information view, edition and deletion of day-to-day tasks, projects and notes. 
 
 How do you manage to differentiate between tasks?
 Tasks are categorized by five different time categories and optionally by a specific project they belong to. Additionally, some features of a task are colored differently depending on its urgency. For instance, if the task is of high urgency, its features will be coloured red. 
