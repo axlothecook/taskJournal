@@ -38,14 +38,20 @@ Any notes on improvement for future projects? <br />
 + commit to github after at the end of day for easier review of code to implement optimizated and simpler code easier
 
 Demo: <br />
-// general look of the website on 1200px+ screen, iPad and smartphone
+// general look of the website on 1200px+ screen and smartphone
 ![image](https://github.com/user-attachments/assets/666d943b-df05-40f4-ab2a-9a377ee0e4ee)
+![image](https://github.com/user-attachments/assets/b689c8e0-882e-47e6-9fc7-c3d0226a882d)
+
 
 // creating a new task
 ![image](https://github.com/user-attachments/assets/dfff1d97-8c0b-48e3-b0d1-93b6961efecf)
+![image](https://github.com/user-attachments/assets/eccbb6b8-5cef-416b-a41b-dd945a3086e6)
+
 
 // editing a task 
 ![image](https://github.com/user-attachments/assets/a66f17c1-13e8-44b5-964b-e50dec221cf6)
+![image](https://github.com/user-attachments/assets/d471cd25-9dad-415c-9acb-5cbb5ddb345d)
+
 
 // details of a task
 ![image](https://github.com/user-attachments/assets/1d24089e-bc56-44a1-9f91-a3e278e3e08e)
