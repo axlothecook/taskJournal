@@ -1,4 +1,5 @@
 Title: taskJournal
+
 What is it?
 taskJournal is an online task manager for the busybodies. This includes creation, information view, edition and deletion of day-to-day tasks, projects and notes. 
 
