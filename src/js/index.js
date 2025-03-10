@@ -412,13 +412,7 @@ const GUIManager = (function(){
                 dueDateDiv.classList.add('due-date-div');
                 dueDateDiv.textContent = `${format(new Date(task.dueDate), 'MMM')} ${format(new Date(task.dueDate), 'do')}`;
                 (window.innerWidth > 600) ? taskRightSide.appendChild(dueDateDiv) : taskLeftSide.appendChild(dueDateDiv); 
-                // window.addEventListener('resize', () => {
-                //     if (window.innerWidth > 600) {
-                //         taskRightSide.appendChild(dueDateDiv);
-                //         taskRightSide.appendChild(svgDiv);
-                //     } else taskLeftSide.appendChild(dueDateDiv);
-                // });
-
+                
                 const svgDiv = document.createElement('div');
                 svgDiv.classList.add('edit-delete-svg-div');
                 taskRightSide.appendChild(svgDiv);

@@ -1,8 +1,6 @@
 html, body {
     user-select: none;
     height: 100%;
-    overflow-y: hidden;
-    overflow-x: hidden;
 }
 
 *, *::before, *::after{
@@ -80,6 +78,7 @@ span {
 #child{
     display: flex;
     flex-grow: 1;
+    overflow-y: scroll;
 }
 
 .side-bar{
