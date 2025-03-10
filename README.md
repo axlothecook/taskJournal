@@ -1,4 +1,5 @@
 Name of the project: taskJournal
+![image](https://github.com/user-attachments/assets/666d943b-df05-40f4-ab2a-9a377ee0e4ee)
 
 What is it? <br />
 taskJournal is an online task manager for the busybodies. This includes creation, information view, edition and deletion of day-to-day tasks, projects and notes. 
