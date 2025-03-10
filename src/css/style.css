@@ -69,11 +69,11 @@ span {
 }
 
 #topbar {
-    padding: 10px;
+    padding: 10px 10px 10px 30px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: baseline;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     background-color: var(--btn-topbar);
 }
 
@@ -328,6 +328,16 @@ span {
     height: 18px;
     display: flex;
     align-items: center;
+}
+
+#topbar-svg-div {
+    width: 30px;
+    height: 30px;
+}
+
+.topbar-svg {
+    height: inherit;
+    filter: invert(0%) sepia(7%) saturate(7471%) hue-rotate(279deg) brightness(91%) contrast(109%);
 }
 
 .delete-svg {

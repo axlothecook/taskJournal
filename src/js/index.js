@@ -10,6 +10,7 @@ import closeSvgVar from '/image/x-svg.svg';
 import trashSvgVar from '/image/trash-can-regular.svg';
 import editSvgVar from '/image/pen-to-square-regular.svg';
 import openSidebarSvgReal from '/image/bars-solid.svg';
+import topBarSvg from '/image/thumbtack-solid.svg';
 
 class Task {
     constructor(title, project, details, dueDate, urgency, done = false) {
@@ -1197,8 +1198,14 @@ const GUIManager = (function(){
             parent.appendChild(child);
 
                 const topbarSvgDiv = document.createElement('div');
-                topbarSvgDiv.setAttribute('id', 'svg-div');
+                topbarSvgDiv.setAttribute('id', 'topbar-svg-div');
                 topBar.appendChild(topbarSvgDiv);
+
+                    const topbarSvg = document.createElement('object');
+                    topbarSvg.setAttribute('type', 'image/svg+xml');
+                    topbarSvg.classList.add('topbar-svg');
+                    topbarSvg.data = topBarSvg;    
+                    topbarSvgDiv.appendChild(topbarSvg); 
 
                 const titleDiv = document.createElement('div');
                 titleDiv.setAttribute('id', 'title-div');
