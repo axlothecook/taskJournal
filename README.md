@@ -38,5 +38,9 @@ Any notes on improvement for future projects? <br />
 + commit to github after at the end of day for easier review of code to implement optimizated and simpler code easier
 
 Demo: <br />
-// general look of the website on 1200px+ screen
+// general look of the website on 1200px+ screen, iPad and smartphone
 ![image](https://github.com/user-attachments/assets/666d943b-df05-40f4-ab2a-9a377ee0e4ee)
+
+// UI for new task creation
+![image](https://github.com/user-attachments/assets/dfff1d97-8c0b-48e3-b0d1-93b6961efecf)
+
