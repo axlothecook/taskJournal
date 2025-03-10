@@ -14,6 +14,9 @@ Each task belongs to only one project, as it made sense a specific task would no
 Where can I find a task that doesn't belong to this month? (so not today, tomorrow or this week) <br />
 The general, all encompassing task category is 'Home'. You can find tasks of all relevancy there, including those that passed (if not deleted) and future ones.
 
+How do I add task to a project? <br />
+Click on the name of the project you wish to add task to and then click the plus button. By clicking on the name of a specific project, after creating a task it will automatically be added to that project.
+
 Are notes categorized? <br />
 Since notes are considered temporary relevant information, they are considered to be quicky deleted by user and such are not categorized by anything. If the user wishes to provide more information to note, such as time or urgency, the user is prompted to create a task instead.
 
