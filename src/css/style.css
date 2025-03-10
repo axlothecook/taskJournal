@@ -1,6 +1,8 @@
 html, body {
     user-select: none;
     height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 *, *::before, *::after{
@@ -78,7 +80,7 @@ span {
 #child{
     display: flex;
     flex-grow: 1;
-    overflow-y: scroll;
+    height: 100px;
 }
 
 .side-bar{
@@ -93,6 +95,7 @@ span {
 
 .tasks-container {
     padding: 30px;
+    overflow-y: scroll;
 }
 
 .flex-column {
@@ -679,6 +682,7 @@ span {
     align-items: center;
     padding: 20px 0px;
     position: fixed;
+    bottom: 0;
     right: -100%;
 }
 
