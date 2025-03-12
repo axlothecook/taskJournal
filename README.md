@@ -25,7 +25,7 @@ What external libraries / frameworks / APIs does this project employ? <br />
 + date-fns library
 
 How are any of the libraries employed? <br />
-date-fns library formats date names on task GUI between details button and edit svg. It is also used in categorizing tasks based on time; whether they are due today, tomorrow, etc. with functions isToday(), isTomorrow(), isThisMonth(), and isThisWeek().
+date-fns library formats date names on task GUI between details button and edit svg. It is also used in categorizing tasks based on time; whether they are due today, tomorrow, etc. with functions isToday(date), isTomorrow(date), isThisMonth(date), and isThisWeek(date).
 
 How are any of the frameworks employed? <br />
 I haven't learned any frameworks yet, and as such the projects does not included any.
