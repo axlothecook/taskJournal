@@ -21,8 +21,8 @@ Are notes categorized? <br />
 Since notes are considered temporary relevant information, they are considered to be quicky deleted by user and such are not categorized by anything. If the user wishes to provide more information to note, such as time or urgency, the user is prompted to create a task instead.
 
 What external libraries / frameworks / APIs does this project employ? <br />
-+ localStorage API
-+ date-fns library
++ localStorage API ([https://github.com/date-fns/date-fns](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage))
++ date-fns library (https://github.com/date-fns/date-fns)
 
 How are any of the libraries employed? <br />
 date-fns library formats date names on task GUI between details button and edit svg. It is also used in categorizing tasks based on time; whether they are due today, tomorrow, etc. with functions isToday(date), isTomorrow(date), isThisMonth(date), and isThisWeek(date).
