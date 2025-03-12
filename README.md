@@ -14,7 +14,7 @@ Each task belongs to only one project, as it made sense a specific task would no
 Where can I find a task that doesn't belong to this month? (so not today, tomorrow or this week) <br />
 The general, all encompassing task category is 'Home'. You can find tasks of all relevancy there, including those that passed (if not deleted) and future ones.
 
-How do I add task to a project? <br />
+How do I add a task to a project? <br />
 Click on the name of the project you wish to add task to and then click the plus button. By clicking on the name of a specific project, after creating a task it will automatically be added to that project.
 
 Are notes categorized? <br />
@@ -24,13 +24,13 @@ What external libraries / frameworks / APIs does this project employ? <br />
 + localStorage API
 + date-fns library
 
-How is any of the libraries employed? <br />
+How are any of the libraries employed? <br />
 date-fns library formats date names on task GUI between details button and edit svg. It is also used in categorizing tasks based on time; whether they are due today, tomorrow, etc. with functions isToday(), isTomorrow(), isThisMonth(), and isThisWeek().
 
-How is any of the frameworks employed? <br />
+How are any of the frameworks employed? <br />
 I haven't learned any frameworks yet, and as such the projects does not included any.
 
-How is any of the APIs employed? <br />
+How are any of the APIs employed? <br />
 localStorage API stores all tasks, projects and notes the taskJournal is initiated with. It saves all creations, editions and deletions user does before page reload. And after the page reload, it loads all previously saved tasks, projects and notes (if any).
 
 Any notes on improvement for future projects? <br />
