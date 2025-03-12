@@ -38,7 +38,7 @@ Any notes on improvement for future projects? <br />
 + use paper to sketch design
 + build css with media queries and scaling down in mind
 + use classess instead of id on html elements
-+ commit to github after at the end of day for easier review of code to implement optimizated and simpler code easier
++ commit to github after after every small improvement for easier review of code to implement optimizated and simpler code easier
 
 Demo: <br />
 // general look of the website on 1200px+ screen and smartphone
